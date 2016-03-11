@@ -18,4 +18,10 @@ dfish <- function(n, beta, log=FALSE) {
     return(out)
 }
 
-pfish <- function(n, beta, log=FALSE)
+pfish <- function(n, beta, log=FALSE) {
+    1 + .betax(exp(-beta), n+1, 0) / log(1 - exp(-beta))
+}
+
+.betax <- function(x, a, b) {
+    1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
+}
