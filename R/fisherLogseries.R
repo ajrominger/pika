@@ -60,18 +60,33 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
 #' @rdname dfish
 
 qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
-    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+    if(log) p <- exp(p)
+    if(lower.tail) p <- 1 - p
+    
+    out <- .fishcdfinv(p, beta)
+    
+    if(any(is.nan(out))) {
+        warning('NaNs produced')
+    }
+    
+    return(out)
 }
 
 ## =================================
 ## helper functions
 ## =================================
 
+## solution to the beta function using the hypergeometic for better accuracy
 .betax <- function(x, a, b) {
     1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
 }
 
+## cdf of the fisher log series
 .fishcdf <- function(x, beta) {
     1 + .betax(exp(-beta), x+1, 0) / log(1 - exp(-beta))
 }
 
+## inverse cdf of the fisher log series
+.fishcdfinv <- function(p, beta) {
+    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+}
