@@ -57,7 +57,7 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
         out[q %% 1 != 0] <- 0
     }
     
-    if(lower.tail) out <- 1 - out
+    if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
     return(out)
 }
@@ -66,7 +66,7 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
 
 qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
-    if(lower.tail) p <- 1 - p
+    if(!lower.tail) p <- 1 - p
     
     out <- .fishcdfinv(p, beta)
     
