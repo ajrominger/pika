@@ -18,7 +18,7 @@
 #' 
 #' @examples
 #' 
-#' dfish(1:10, 0.01)
+#' dstick(1:10, 0.5)
 #' 
 #' @return A numeric vector of length equal to the input
 #'
@@ -26,10 +26,10 @@
 # @seealso 
 # @references 
 
-#' @rdname Fisher
+#' @rdname Stick
 
-dfish <- function(x, beta, log=FALSE) {
-    out <- 1/log(1/(1-exp(-beta))) * exp(-beta*x)/x
+dstick <- function(x, r, log=FALSE) {
+    out <- (1-r)^(x-1) * r
     
     if(any(x %% 1 != 0)) {
         for(bad in x[x %% 1 != 0]) {
@@ -44,10 +44,10 @@ dfish <- function(x, beta, log=FALSE) {
 }
 
 
-#' @rdname Fisher
+#' @rdname Stick
 
-pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
-    out <- 1 + .betax(exp(-beta), q+1, 0) / log(1 - exp(-beta))
+pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
+    out <- 1 - (1-r)^q
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
@@ -57,14 +57,14 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
         out[q %% 1 != 0] <- 0
     }
     
-    if(lower.tail) out <- 1 - out
+    if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
     return(out)
 }
 
-#' @rdname Fisher
+#' @rdname Stick
 
-qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
+qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
     if(lower.tail) p <- 1 - p
     
@@ -78,9 +78,9 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 }
 
 
-#' @rdname Fisher
+#' @rdname Stick
 
-rfish <- function(n, beta) {
+rstick <- function(n, beta) {
     r <- runif(n)
     
     return(.fishcdfinv(r, beta))
@@ -90,18 +90,10 @@ rfish <- function(n, beta) {
 ## helper functions
 ## =================================
 
-## solution to the beta function using the hypergeometic for better accuracy
-.betax <- function(x, a, b) {
-    1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
+## inverse cdf of the broken stick
+.stickcdfinv <- function(p, r) {
+    log(p) / log(1 - r)
 }
 
-## cdf of the fisher log series
-.fishcdf <- function(x, beta) {
-    1 + .betax(exp(-beta), x+1, 0) / log(1 - exp(-beta))
-}
 
-## inverse cdf of the fisher log series
-.fishcdfinv <- function(p, beta) {
-    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', 
-           yleft=NaN, yright=NaN, f=0)
-}
+(1-0.8)^1
