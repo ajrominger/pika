@@ -5,10 +5,13 @@
 #' 
 #' @details These functions assume infinite support of the Fisher logseries
 #' 
-#' @param x
-#' @param beta
-#' @param log
-#' @param n
+#' @param x vector of integers for which to return the probability
+#' @param q vector of integers for which to return the cumulative probability
+#' @param p vector of probabilities for which to return the quantile
+#' @param n number of random replicates
+#' @param beta parameter of the Fisher log series, see Details
+#' @param log logical, should the log probability be used
+#' @param lower.tail logical, should the lower tail be used
 #' 
 #' @keywords Fisher logseries, species abundance, SAD
 #' @export
@@ -22,6 +25,8 @@
 #' @author Andy Rominger <ajrominger@@gmail.com>
 # @seealso 
 # @references 
+
+#' @rdname Fisher
 
 dfish <- function(x, beta, log=FALSE) {
     out <- 1/log(1/(1-exp(-beta))) * exp(-beta*x)/x
@@ -39,7 +44,7 @@ dfish <- function(x, beta, log=FALSE) {
 }
 
 
-#' @rdname dfish
+#' @rdname Fisher
 
 pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
     out <- 1 + .betax(exp(-beta), q+1, 0) / log(1 - exp(-beta))
@@ -57,7 +62,7 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
-#' @rdname dfish
+#' @rdname Fisher
 
 qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
@@ -73,7 +78,7 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 }
 
 
-#' @rdname dfish
+#' @rdname Fisher
 
 rfish <- function(n, beta) {
     r <- runif(n)
