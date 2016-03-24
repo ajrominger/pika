@@ -72,6 +72,15 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
+
+#' @rdname dfish
+
+rfish <- function(n, beta) {
+    r <- runif(n)
+    
+    return(.fishcdfinv(r, beta))
+}
+
 ## =================================
 ## helper functions
 ## =================================
@@ -88,5 +97,6 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 
 ## inverse cdf of the fisher log series
 .fishcdfinv <- function(p, beta) {
-    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', 
+           yleft=NaN, yright=NaN, f=0)
 }
