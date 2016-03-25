@@ -48,7 +48,7 @@ dplnorm <- function(x, mu, sig, log=FALSE) {
 #' @rdname PoisLogNormal
 
 pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
-    out <- 1 - (1-r)^q
+    out <- sum(poilog::dpoilog(1:q, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
@@ -65,11 +65,11 @@ pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
 
 #' @rdname PoisLogNormal
 
-qplnorm <- function(p, r, lower.tail=TRUE, log=FALSE) {
+qplnorm <- function(p, mu, sig, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
     if(!lower.tail) p <- 1 - p
     
-    out <- .stickcdfinv(p, r)
+    out <- .plnormcdfinv(p, mu, sig)
     
     if(any(is.nan(out))) {
         warning('NaNs produced')
@@ -81,8 +81,15 @@ qplnorm <- function(p, r, lower.tail=TRUE, log=FALSE) {
 
 #' @rdname PoisLogNormal
 
-rplnorm <- function(n, r) {
-    lat <- rlnorm()
+rplnorm <- function(n, mu, sig) {
+    N <- 100 * n / (1 - dpois(0, exp(mu + sig^2/2)))
+    lat <- rlnorm(N, mu, sig)
+    rel <- rpois(N, lat)
+    rel <- rel[rel > 0]
+    
+    if(length(rel) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
+    
+    return(sample(rel, n, rep=ifelse(n < length(rel), FALSE, TRUE)))
 }
 
 
@@ -90,7 +97,8 @@ rplnorm <- function(n, r) {
 ## helper functions
 ## =================================
 
-## inverse cdf of the broken stick
-.stickcdfinv <- function(p, r) {
-    log(1 - p) / log(1 - r)
+## inverse cdf of the poisson log normal
+.plnormcdfinv <- function(p, mu, sig) {
+    approx(x=cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)), y=10000,
+           xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
 }
