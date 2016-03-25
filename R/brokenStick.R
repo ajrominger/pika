@@ -66,9 +66,9 @@ pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
 
 qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
-    if(lower.tail) p <- 1 - p
+    if(!lower.tail) p <- 1 - p
     
-    out <- .fishcdfinv(p, beta)
+    out <- .stickcdfinv(p, r)
     
     if(any(is.nan(out))) {
         warning('NaNs produced')
@@ -80,11 +80,10 @@ qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
 
 #' @rdname Stick
 
-rstick <- function(n, beta) {
-    r <- runif(n)
-    
-    return(.fishcdfinv(r, beta))
+rstick <- function(n, r) {
+    return(rgeom(n, r) + 1)
 }
+
 
 ## =================================
 ## helper functions
@@ -92,8 +91,5 @@ rstick <- function(n, beta) {
 
 ## inverse cdf of the broken stick
 .stickcdfinv <- function(p, r) {
-    log(p) / log(1 - r)
+    log(1 - p) / log(1 - r)
 }
-
-
-(1-0.8)^1
