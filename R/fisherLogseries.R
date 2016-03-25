@@ -81,9 +81,9 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 #' @rdname Fisher
 
 rfish <- function(n, beta) {
-    r <- runif(n)
+    r <- runif(n, .fishcsf(1, beta), 1)
     
-    return(.fishcdfinv(r, beta))
+    return(floor(.fishcdfinv(r, beta)))
 }
 
 ## =================================
