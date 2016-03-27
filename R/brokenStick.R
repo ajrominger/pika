@@ -13,7 +13,7 @@
 #' @param log logical, should the log probability be used
 #' @param lower.tail logical, should the lower tail be used
 #' 
-#' @keywords Fisher logseries, species abundance, SAD
+#' @keywords Broken stick, geometric distribution, species abundance, SAD
 #' @export
 #' 
 #' @examples
