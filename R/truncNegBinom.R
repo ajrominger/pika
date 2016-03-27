@@ -19,7 +19,7 @@
 #' 
 #' @examples
 #' 
-#' dplnorm(1:10, 0.5, 0.1)
+#' dtnegb(1:10, 0.5, 2)
 #' 
 #' @return A numeric vector of length equal to the input
 #'
@@ -27,10 +27,10 @@
 # @seealso 
 # @references 
 
-#' @rdname PoisLogNormal
+#' @rdname TNegBinom
 
-dplnorm <- function(x, mu, sig, log=FALSE) {
-    out <- poilog::dpoilog(x, mu, sig) / (1 - poilog::dpoilog(0, mu, sig))
+dtnegb <- function(x, mu, k, log=FALSE) {
+    out <- dnbinom(x, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k))
     
     if(any(x %% 1 != 0)) {
         for(bad in x[x %% 1 != 0]) {
@@ -45,10 +45,10 @@ dplnorm <- function(x, mu, sig, log=FALSE) {
 }
 
 
-#' @rdname PoisLogNormal
+#' @rdname TNegBinom
 
-pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
-    out <- sum(poilog::dpoilog(1:q, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
+    out <- sum(dnbinom(1:q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k)))
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
@@ -63,13 +63,14 @@ pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
-#' @rdname PoisLogNormal
+#' @rdname TNegBinom
 
-qplnorm <- function(p, mu, sig, lower.tail=TRUE, log=FALSE) {
+qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
     if(!lower.tail) p <- 1 - p
     
-    out <- .plnormcdfinv(p, mu, sig)
+    out <- approx(x=cumsum(dnbinom(1:10000, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k)), y=1:10000,
+                  xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
     
     if(any(is.nan(out))) {
         warning('NaNs produced')
@@ -79,26 +80,14 @@ qplnorm <- function(p, mu, sig, lower.tail=TRUE, log=FALSE) {
 }
 
 
-#' @rdname PoisLogNormal
+#' @rdname TNegBinom
 
-rplnorm <- function(n, mu, sig) {
-    N <- 100 * n / (1 - dpois(0, exp(mu + sig^2/2)))
-    lat <- rlnorm(N, mu, sig)
-    rel <- rpois(N, lat)
-    rel <- rel[rel > 0]
+rtnegb <- function(n, mu, k) {
+    N <- 100 * n / (1 - dnbinom(0, mu=mu, size=k))
+    temp <- rnbinom(N, mu=mu, size=k)
+    temp <- temp[temp > 0]
     
-    if(length(rel) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
+    if(length(temp) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
     
-    return(sample(rel, n, rep=ifelse(n < length(rel), FALSE, TRUE)))
-}
-
-
-## =================================
-## helper functions
-## =================================
-
-## inverse cdf of the poisson log normal
-.plnormcdfinv <- function(p, mu, sig) {
-    approx(x=cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)), y=10000,
-           xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+    return(sample(temp, n, rep=ifelse(n < length(temp), FALSE, TRUE)))
 }
