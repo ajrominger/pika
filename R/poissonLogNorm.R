@@ -99,6 +99,6 @@ rplnorm <- function(n, mu, sig) {
 
 ## inverse cdf of the poisson log normal
 .plnormcdfinv <- function(p, mu, sig) {
-    approx(x=cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)), y=10000,
+    approx(x=cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)), y=1:10000,
            xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
 }
