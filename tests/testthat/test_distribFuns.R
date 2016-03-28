@@ -1,9 +1,7 @@
-context('SAR works')
-## values of S0, N0, A0 and predicted S from Newman et al. 
+context('distribution functions work')
 
-
-test_that('predicted SAR values are correct', {
-  bell.sar <- meteSAR(S0=32, N0=920, Amin=1, A0=16)$pred$S
-  newmanS <- c(12.2560715, 15.8991283, 20.2158684, 25.7856639, 32)
-  expect_true(all(round(bell.sar, 3) == round(newmanS, 3)))
+test_that('truncated Poisson pfun works', {
+    expect_true(all(ptpois(1:10, 1) - cumsum(dtpois(1:10, 1)) < .Machine$double.eps))
+    expect_true(all(ptpois(1:10, 1, log=TRUE) - log(cumsum(dtpois(1:10, 1))) < .Machine$double.eps))
+    expect_true(all(ptpois(1:10, 1, lower.tail=FALSE) - (1 - cumsum(dtpois(1:10, 1))) < .Machine$double.eps))
 })
