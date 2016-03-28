@@ -31,8 +31,10 @@
 dtpois <- function(x, lambda, log=FALSE) {
     if(log) {
         out <- dpois(x, lambda, log=TRUE) - log(1 - dpois(0, lambda))
+        out[x < 1] <- -Inf
     } else {
         out <- dpois(x, lambda) / (1 - dpois(0, lambda))
+        out[out < 1] <- 0
     }
     
     return(out)
