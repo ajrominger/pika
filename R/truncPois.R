@@ -50,7 +50,6 @@ ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
         out <- ppois(q, lambda, lower.tail=lower.tail) / (1 - dpois(0, lambda))
     }
     
-    
     if(log) out <- log(out)
     
     return(out)
@@ -59,29 +58,15 @@ ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
 #' @rdname TPois
 
 qtpois <- function(p, lambda, lower.tail=TRUE, log=FALSE) {
-#     if(log) p <- exp(p)
-#     if(!lower.tail) p <- 1 - p
-#     
-#     out <- approx(x=cumsum(dnbinom(1:10000, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k)), y=1:10000,
-#                   xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
-#     
-#     if(any(is.nan(out))) {
-#         warning('NaNs produced')
-#     }
-#     
-#     return(out)
-    qpois(p/(1-dpois(0, lambda)), lambda)
+    if(log) p <- exp(p)
+    if(!lower.tail) p <- 1 - p
+    
+    return(qpois(p*(1-dpois(0, lambda)) + dpois(0, lambda), lambda))
 }
 
 
 #' @rdname TPois
 
 rtpois <- function(n, lambda) {
-    N <- 100 * n / (1 - dpois(0, lambda))
-    temp <- rpois(N, lambda)
-    temp <- temp[temp > 0]
-    
-    if(length(temp) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
-    
-    return(sample(temp, n, rep=ifelse(n < length(temp), FALSE, TRUE)))
+    return(.its(n, qtpois, dtpois(0, lambda), lambda=lambda))
 }
