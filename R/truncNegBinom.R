@@ -48,7 +48,7 @@ dtnegb <- function(x, mu, k, log=FALSE) {
 #' @rdname TNegBinom
 
 ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
-    out <- sum(dnbinom(1:q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k)))
+    out <- pnbinom(q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k)))
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
