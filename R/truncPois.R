@@ -48,9 +48,10 @@ dtpois <- function(x, lambda, log=FALSE) {
 
 ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
     if(log) {
-        out <- ppois(q, lambda, lower.tail=lower.tail, log=TRUE) - (1 - dpois(0, lambda, log=TRUE)))
+#         out <- ppois(q, lambda, lower.tail=lower.tail, log=TRUE) - (1 - dpois(0, lambda, log=TRUE))
+        out <- NA
     } else {
-        out <- ppois(q, lambda, lower.tail=lower.tail) / (1 - dpois(0, lambda)))
+        out <- (ppois(q, lambda, lower.tail=lower.tail) - dpois(0, lambda)) / (1 - dpois(0, lambda))
     }
     
     return(out)
@@ -58,18 +59,19 @@ ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
 
 #' @rdname TPois
 
-qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
-    if(log) p <- exp(p)
-    if(!lower.tail) p <- 1 - p
-    
-    out <- approx(x=cumsum(dnbinom(1:10000, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k)), y=1:10000,
-                  xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
-    
-    if(any(is.nan(out))) {
-        warning('NaNs produced')
-    }
-    
-    return(out)
+qtpois <- function(p, lambda, lower.tail=TRUE, log=FALSE) {
+#     if(log) p <- exp(p)
+#     if(!lower.tail) p <- 1 - p
+#     
+#     out <- approx(x=cumsum(dnbinom(1:10000, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k)), y=1:10000,
+#                   xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+#     
+#     if(any(is.nan(out))) {
+#         warning('NaNs produced')
+#     }
+#     
+#     return(out)
+    qpois(p/(1-dpois(0, lambda)), lambda)
 }
 
 
