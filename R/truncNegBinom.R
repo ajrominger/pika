@@ -45,15 +45,7 @@ dtnegb <- function(x, mu, k, log=FALSE) {
 #' @rdname TNegBinom
 
 ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
-    out <- pnbinom(q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k))
-    
-    if(any(q %% 1 != 0)) {
-        for(bad in q[q %% 1 != 0]) {
-            warning(sprintf('non-integer q = %s', bad))
-        }
-        
-        out[q %% 1 != 0] <- 0
-    }
+    out <- (pnbinom(q, mu=mu, size=k) - dnbinom(0, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k))
     
     if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
