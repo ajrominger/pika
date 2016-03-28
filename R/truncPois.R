@@ -29,17 +29,12 @@
 #' @rdname TPois
 
 dtpois <- function(x, lambda, log=FALSE) {
-    out <- dpois(x, lambda) / (1 - dpois(0, lambda))
-    
-    if(any(x %% 1 != 0)) {
-        for(bad in x[x %% 1 != 0]) {
-            warning(sprintf('non-integer x = %s', bad))
-        }
-        
-        out[x %% 1 != 0] <- 0
+    if(log) {
+        out <- dpois(x, lambda, log=TRUE) - log(1 - dpois(0, lambda))
+    } else {
+        out <- dpois(x, lambda) / (1 - dpois(0, lambda))
     }
     
-    if(log) out <- log(out)
     return(out)
 }
 
