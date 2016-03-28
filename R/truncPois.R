@@ -47,18 +47,12 @@ dtpois <- function(x, lambda, log=FALSE) {
 #' @rdname TPois
 
 ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
-    out <- ppois(q, lambda) / (1 - dpois(0, lambda)))
-    
-    if(any(q %% 1 != 0)) {
-        for(bad in q[q %% 1 != 0]) {
-            warning(sprintf('non-integer q = %s', bad))
-        }
-        
-        out[q %% 1 != 0] <- 0
+    if(log) {
+        out <- ppois(q, lambda, lower.tail=lower.tail, log=TRUE) - (1 - dpois(0, lambda, log=TRUE)))
+    } else {
+        out <- ppois(q, lambda, lower.tail=lower.tail) / (1 - dpois(0, lambda)))
     }
     
-    if(!lower.tail) out <- 1 - out
-    if(log) out <- log(out)
     return(out)
 }
 
