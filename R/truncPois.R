@@ -44,12 +44,9 @@ dtpois <- function(x, lambda, log=FALSE) {
 #' @rdname TPois
 
 ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
-    if(log) {
-#         out <- ppois(q, lambda, lower.tail=lower.tail, log=TRUE) - (1 - dpois(0, lambda, log=TRUE))
-        out <- NA
-    } else {
-        out <- (ppois(q, lambda, lower.tail=lower.tail) - dpois(0, lambda)) / (1 - dpois(0, lambda))
-    }
+    out <- (ppois(q, lambda, lower.tail=lower.tail) - dpois(0, lambda)) / (1 - dpois(0, lambda))
+    
+    if(log) out <- log(out)
     
     return(out)
 }
