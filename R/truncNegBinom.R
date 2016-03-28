@@ -30,17 +30,14 @@
 #' @rdname TNegBinom
 
 dtnegb <- function(x, mu, k, log=FALSE) {
-    out <- dnbinom(x, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k))
-    
-    if(any(x %% 1 != 0)) {
-        for(bad in x[x %% 1 != 0]) {
-            warning(sprintf('non-integer x = %s', bad))
-        }
-        
-        out[x %% 1 != 0] <- 0
+    if(log) {
+        out <- dnbinom(x, mu=mu, size=k, log=TRUE) - log(1 - dnbinom(0, mu=mu, size=k))
+        out[x < 1] <- -Inf
+    } else {
+        out <- dnbinom(x, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k))
+        out[x < 1] <- 0
     }
     
-    if(log) out <- log(out)
     return(out)
 }
 
@@ -48,7 +45,7 @@ dtnegb <- function(x, mu, k, log=FALSE) {
 #' @rdname TNegBinom
 
 ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
-    out <- pnbinom(q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k)))
+    out <- pnbinom(q, mu=mu, size=k) / (1 - dnbinom(0, mu=mu, size=k))
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
@@ -62,6 +59,7 @@ ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
     if(log) out <- log(out)
     return(out)
 }
+
 
 #' @rdname TNegBinom
 
