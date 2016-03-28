@@ -59,25 +59,22 @@ qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
     if(!lower.tail) p <- 1 - p
     
-    out <- approx(x=cumsum(dnbinom(1:10000, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k)), y=1:10000,
-                  xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
-    
-    if(any(is.nan(out))) {
-        warning('NaNs produced')
-    }
-    
-    return(out)
+    return(qnbinom(p*(1-dnbinom(0, mu=mu, size=k)) + dnbinom(0, mu=mu, size=k), mu=mu, size=k))
 }
 
 
 #' @rdname TNegBinom
 
 rtnegb <- function(n, mu, k) {
-    N <- 100 * n / (1 - dnbinom(0, mu=mu, size=k))
-    temp <- rnbinom(N, mu=mu, size=k)
-    temp <- temp[temp > 0]
-    
-    if(length(temp) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
-    
-    return(sample(temp, n, rep=ifelse(n < length(temp), FALSE, TRUE)))
+    return(.its(n, qtnegb, dtnegb(0, mu, k), mu=mu, k=k))
 }
+
+# rtnegb <- function(n, mu, k) {
+#     N <- 100 * n / (1 - dnbinom(0, mu=mu, size=k))
+#     temp <- rnbinom(N, mu=mu, size=k)
+#     temp <- temp[temp > 0]
+#     
+#     if(length(temp) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
+#     
+#     return(sample(temp, n, rep=ifelse(n < length(temp), FALSE, TRUE)))
+# }
