@@ -3,3 +3,5 @@
 export(dfish)
 export(dplnorm)
 export(dstick)
+export(dtnegb)
+export(dtpois)
