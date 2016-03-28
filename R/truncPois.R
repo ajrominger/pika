@@ -34,7 +34,7 @@ dtpois <- function(x, lambda, log=FALSE) {
         out[x < 1] <- -Inf
     } else {
         out <- dpois(x, lambda) / (1 - dpois(0, lambda))
-        out[out < 1] <- 0
+        out[x < 1] <- 0
     }
     
     return(out)
