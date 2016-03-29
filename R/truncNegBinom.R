@@ -45,9 +45,13 @@ dtnegb <- function(x, mu, k, log=FALSE) {
 #' @rdname TNegBinom
 
 ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
-    out <- (pnbinom(q, mu=mu, size=k) - dnbinom(0, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k))
+    if(lower.tail) {
+        out <- (pnbinom(q, mu=mu, size=k) - dnbinom(0, mu=mu, size=k)) / (1 - dnbinom(0, mu=mu, size=k))
+    } else {
+        out <- pnbinom(q, mu=mu, size=k, lower.tail=FALSE) / (1 - dnbinom(0, mu=mu, size=k))
+    }
     
-    if(!lower.tail) out <- 1 - out
+    out[q < 1] <- 0
     if(log) out <- log(out)
     return(out)
 }
@@ -68,13 +72,3 @@ qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
 rtnegb <- function(n, mu, k) {
     return(.its(n, qtnegb, dtnegb(0, mu, k), mu=mu, k=k))
 }
-
-# rtnegb <- function(n, mu, k) {
-#     N <- 100 * n / (1 - dnbinom(0, mu=mu, size=k))
-#     temp <- rnbinom(N, mu=mu, size=k)
-#     temp <- temp[temp > 0]
-#     
-#     if(length(temp) < n) warning(sprintf('could not find %s unique random variates, using bootstrapping', n))
-#     
-#     return(sample(temp, n, rep=ifelse(n < length(temp), FALSE, TRUE)))
-# }
