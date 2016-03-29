@@ -58,3 +58,33 @@ test_that('truncated Negative Binomial rfun works', {
     r1 <- rtnegb(10000, m, 3)
     expect_true(abs(mean(r1) - m / (1 - dnbinom(0, mu=m, size=3))) < 0.05)
 })
+
+## =================================
+## Fisher log series
+## =================================
+
+test_that('Fisher log series dfun works', {
+    expect_warning(dfish(0.5, 0.1))
+    expect_equal(dfish(0, 0.1), 0)
+})
+
+test_that('Fisher log series pfun works', {
+    expect_true(all(abs(pfish(1:10, 0.1) - cumsum(dfish(1:10, 0.1))) <= .Machine$double.eps*6))
+    expect_true(all(abs(pfish(1:10, 0.1, log=TRUE) - log(cumsum(dfish(1:10, 0.1)))) <= .Machine$double.eps*12))
+    expect_true(all(abs(pfish(1:10, 0.1, lower.tail=FALSE) - (1 - cumsum(dfish(1:10, 0.1)))) <= .Machine$double.eps*6))
+    expect_equal(pfish(0, 0.1), 0)
+})
+
+test_that('Fisher log series qfun works', {
+    expect_equal(qfish(pfish(1:10, 0.1), 0.1), 1:10)
+    expect_equal(qfish(pfish(1:10, 0.1, lower.tail=FALSE), 0.1, lower.tail=FALSE), 1:10)
+    expect_equal(qfish(pfish(1:10, 0.1, log=TRUE), 0.1, log=TRUE), 1:10)
+})
+
+test_that('Fisher log series rfun works', {
+    b <- 0.1
+    tru.mean <- -1/log(1-exp(-b)) * exp(-b)/(1 - exp(-b))
+    r1 <- rfish(10000, b)
+    tru.mean - mean(r1)
+    expect_true(abs(mean(r1) - tru.mean) < 0.5)
+})
