@@ -50,6 +50,7 @@ ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
         out <- ppois(q, lambda, lower.tail=lower.tail) / (1 - dpois(0, lambda))
     }
     
+    out[q < 1] <- 0
     if(log) out <- log(out)
     
     return(out)
