@@ -39,6 +39,8 @@ dstick <- function(x, r, log=FALSE) {
         out[x %% 1 != 0] <- 0
     }
     
+    out[x < 1] <- 0
+    
     if(log) out <- log(out)
     return(out)
 }
@@ -56,6 +58,8 @@ pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
         
         out[q %% 1 != 0] <- 0
     }
+    
+    out[q < 1] <- 0
     
     if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
