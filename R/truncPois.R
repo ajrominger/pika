@@ -69,5 +69,5 @@ qtpois <- function(p, lambda, lower.tail=TRUE, log=FALSE) {
 #' @rdname TPois
 
 rtpois <- function(n, lambda) {
-    return(.its(n, qtpois, dtpois(1, lambda), lambda=lambda))
+    return(.its(n, qtpois, dtpois(0, lambda), lambda=lambda))
 }
