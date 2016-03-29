@@ -30,14 +30,13 @@
 #' @rdname PoisLogNormal
 
 dplnorm <- function(x, mu, sig, log=FALSE) {
-    out <- poilog::dpoilog(x, mu, sig) / (1 - poilog::dpoilog(0, mu, sig))
+    out <- length(x)
+    out[x %% 1 == 0 & x >= 1] <- poilog::dpoilog(x[x %% 1 == 0 & x >= 1], mu, sig) / (1 - poilog::dpoilog(0, mu, sig))
     
     if(any(x %% 1 != 0)) {
         for(bad in x[x %% 1 != 0]) {
             warning(sprintf('non-integer x = %s', bad))
         }
-        
-        out[x %% 1 != 0] <- 0
     }
     
     if(log) out <- log(out)
@@ -48,14 +47,20 @@ dplnorm <- function(x, mu, sig, log=FALSE) {
 #' @rdname PoisLogNormal
 
 pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
-    out <- sum(poilog::dpoilog(1:q, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+    out <- numeric(length(q))
+    
+    if(length(q) > 1) {
+        temp <- cumsum(poilog::dpoilog(1:floor(max(q)), mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+        out[q %% 1 == 0 & q >= 1] <- temp[q %% 1 == 0 & q >= 1]
+    } else {
+        if(q %% 1 == 0 & q >= 1)
+            out <- sum(poilog::dpoilog(1:q, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+    }
     
     if(any(q %% 1 != 0)) {
         for(bad in q[q %% 1 != 0]) {
             warning(sprintf('non-integer q = %s', bad))
         }
-        
-        out[q %% 1 != 0] <- 0
     }
     
     if(!lower.tail) out <- 1 - out
