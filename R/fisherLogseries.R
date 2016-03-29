@@ -39,6 +39,8 @@ dfish <- function(x, beta, log=FALSE) {
         out[x %% 1 != 0] <- 0
     }
     
+    out[x < 1] <- 0
+    
     if(log) out <- log(out)
     return(out)
 }
@@ -56,6 +58,8 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
         
         out[q %% 1 != 0] <- 0
     }
+    
+    out[q < 1] <- 0
     
     if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
@@ -81,8 +85,9 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 #' @rdname Fisher
 
 rfish <- function(n, beta) {
-    return(.its(n, .fishcdfinv, .fishcsf(1, beta), beta=beta))
+    return(.its(n, .fishcdfinv, pfish(0, beta), beta=beta))
 }
+
 
 ## =================================
 ## helper functions
@@ -100,6 +105,8 @@ rfish <- function(n, beta) {
 
 ## inverse cdf of the fisher log series
 .fishcdfinv <- function(p, beta) {
-    approx(x=.fishcdf(1:10000, beta), y=1:10000, xout=p, method='constant', 
-           yleft=NaN, yright=NaN, f=0)
+    approx(x=.fishcdf(0:10000, beta), y=0:10000, xout=p, method='constant', 
+           yleft=NaN, yright=Inf, f=1)$y
 }
+
+plot(.fishcdfinv(seq(0, 0.95, by=0.05), 0.1))
