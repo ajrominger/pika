@@ -108,5 +108,3 @@ rfish <- function(n, beta) {
     approx(x=.fishcdf(0:10000, beta), y=0:10000, xout=p, method='constant', 
            yleft=NaN, yright=Inf, f=1)$y
 }
-
-plot(.fishcdfinv(seq(0, 0.95, by=0.05), 0.1))
