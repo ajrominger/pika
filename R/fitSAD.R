@@ -42,8 +42,15 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
 
 .fitFish <- function(x) {
     xbar <- mean(x)
-    uniroot(function(p) -1/log(1 - p) * p/(1 - p) - xbar, interval=0:1)
+    # fun <- function(p) -1/log(1 - p) * p/(1 - p) - xbar
+    # uniroot(fun, lower=.Machine$double.eps, upper=1-.Machine$double.eps, tol=.Machine$double.eps)
+    fun <- function(b) log((-1/log(1 - exp(-b)) * exp(-b)/(1 - exp(-b)) - xbar)^2)
+    fit <- optimize(fun, lower=xbar^-4, upper=20/xbar, tol=.Machine$double.eps)
+    
+    ## consider doing log(b)
 }
 
 
-#rfish(100, 0.01)
+# x <- rfish(100, 0.01)
+.fitFish(x)
+
