@@ -30,7 +30,7 @@
 #' @rdname PoisLogNormal
 
 dplnorm <- function(x, mu, sig, log=FALSE) {
-    out <- length(x)
+    out <- numeric(length(x))
     out[x %% 1 == 0 & x >= 1] <- poilog::dpoilog(x[x %% 1 == 0 & x >= 1], mu, sig) / (1 - poilog::dpoilog(0, mu, sig))
     
     if(any(x %% 1 != 0)) {
@@ -104,6 +104,7 @@ rplnorm <- function(n, mu, sig) {
 
 ## inverse cdf of the poisson log normal
 .plnormcdfinv <- function(p, mu, sig) {
-    approx(x=cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)), y=1:10000,
-           xout=p, xout=p, method='constant', yleft=NaN, yright=NaN, f=0)
+    this.cdf <- c(0, cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)))
+    approx(x=this.cdf, y=0:10000,
+           xout=p, method='constant', yleft=NaN, yright=Inf, f=1)$y
 }
