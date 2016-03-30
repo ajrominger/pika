@@ -91,30 +91,31 @@ test_that('Fisher log series rfun works', {
 })
 
 ## =================================
-## Broken stick
+## Poisson log normal
 ## =================================
 
-test_that('Broken stick dfun works', {
-    expect_equal(dstick(1:10, 0.5), dgeom(1:10, 0.5) / (1 - dgeom(0, 0.5)))
-    expect_warning(dstick(0.5, 1))
-    expect_equal(dstick(0, 1), 0)
+test_that('Poisson log normal dfun works', {
+    expect_equal(dplnorm(1:10, 1, 1), poilog::dpoilog(1:10, 1, 1) / (1 - poilog::dpoilog(0, 1, 1)))
+    expect_warning(dplnorm(0.5, 1, 1))
+    expect_equal(dplnorm(0, 1, 1), 0)
 })
 
-test_that('Broken stick pfun works', {
-    expect_true(all(abs(pstick(1:10, 0.5) - cumsum(dstick(1:10, 0.5))) < .Machine$double.eps))
-    expect_true(all(abs(pstick(1:10, 0.5, log=TRUE) - log(cumsum(dstick(1:10, 0.5)))) < .Machine$double.eps))
-    expect_true(all(abs(pstick(1:10, 0.5, lower.tail=FALSE) - (1 - cumsum(dstick(1:10, 0.5)))) < .Machine$double.eps))
-    expect_equal(pstick(0, 1), 0)
+test_that('Poisson log normal pfun works', {
+    expect_true(all(abs(pplnorm(1:10, 1, 1) - cumsum(dplnorm(1:10, 1, 1))) < .Machine$double.eps))
+    expect_true(all(abs(pplnorm(1:10, 1, 1, log=TRUE) - log(cumsum(dplnorm(1:10, 1, 1)))) < .Machine$double.eps))
+    expect_true(all(abs(pplnorm(1:10, 1, 1, lower.tail=FALSE) - (1 - cumsum(dplnorm(1:10, 1, 1)))) < .Machine$double.eps))
+    expect_equal(pplnorm(0, 1, 1), 0)
 })
 
-test_that('Broken stick qfun works', {
-    expect_equal(qstick(pstick(1:10, 0.5), 0.5), 1:10)
-    expect_equal(qstick(pstick(1:10, 0.5, lower.tail=FALSE), 0.5, lower.tail=FALSE), 1:10)
-    expect_equal(qstick(pstick(1:10, 0.5, log=TRUE), 0.5, log=TRUE), 1:10)
+test_that('Poisson log normal qfun works', {
+    expect_equal(qplnorm(pplnorm(1:10, 1, 1), 1, 1), 1:10)
+#    expect_equal(qplnorm(pplnorm(1:10, 1, 1, lower.tail=FALSE), 1, 1, lower.tail=FALSE), 1:10)
+    expect_equal(qplnorm(pplnorm(1:10, 1, 1, log=TRUE), 1, 1, log=TRUE), 1:10)
 })
 
-test_that('Broken stick rfun works', {
-    p <- 0.5
-    r1 <- rstick(10000, p)
-    expect_true(abs(mean(r1) - 1/p) < 0.05)
+test_that('Poisson log normal rfun works', {
+    m <- 2
+    s <- 1
+    r1 <- rplnorm(10000, m, s)
+    expect_true(abs(mean(r1) - exp(m+s^2/2) / (1 - poilog::dpoilog(0, m, s))) < 0.5)
 })
