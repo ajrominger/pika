@@ -80,7 +80,8 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
     init.mu <- mean(log(x))
     init.sig <- log(sd(log(x)))
     
-    fit <- optim(c(init.mu, init.sig), fun, control=list(reltol=.Machine$double.eps))
+    fit <- optim(c(init.mu, init.sig), fun, method='L-BFGS-B', 
+                 lower=c(0, log(.Machine$double.eps)), upper=2*c(init.mu, init.sig))
     fit$par[2] <- exp(fit$par[2])
     
     return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
@@ -110,7 +111,8 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
         init.k <- log(mean(x)^2 / (var(x) - mean(x)))
     }
     
-    fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', lower=rep(.Machine$double.eps, 2), upper=c(init.mu*10, init.k*2))
+    fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', 
+                 lower=rep(.Machine$double.eps, 2), upper=c(init.mu*10, init.k*2))
     fit$par[2] <- exp(fit$par[2])
     
     return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))

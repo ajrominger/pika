@@ -5,7 +5,11 @@ context('fitting functions work')
 ## =================================
 
 test_that('truncated Poisson fitting works', {
-    expect_equal(dtpois(1:10, 1), dpois(1:10, 1) / (1 - dpois(0, 1)))
-    expect_warning(dtpois(0.5, 1))
-    expect_equal(dtpois(0, 1), 0)
+    la <- 3
+    x <- rtpois(10000, la)
+    
 })
+
+
+fitSAD(1:10)
+fitSAD(1:10, models='fish')
