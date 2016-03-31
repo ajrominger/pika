@@ -99,16 +99,9 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
     return(fit)
 }
 
-
-# x <- rtnegb(10000, 3, 15)
-.fitTnegb(x)
-
 .fitTpois <- function(x) {
     mle <- mean(x) + gsl::lambert_W0(-mean(x)*exp(-mean(x)))
     
     return(list(MLE=mle, ll=sum(dtpois(x, mle, log=TRUE)), df=1, nobs=length(x)))
 }
 
-
-x <- rtpois(10000, 3)
-.fitTpois(x)
