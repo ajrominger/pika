@@ -3,7 +3,7 @@
 #' @description \code{dstick} gives the probability mass function, \code{pstick} gives the cumulative mass 
 #' function, \code{qstick} the quantile function, \code{rstick} randome number generation
 #' 
-#' @details These functions assume infinite support of the Broken stick
+#' @details These functions assume infinite support of the Broken stick model. Parameter \code{r} corresponds roughly to the probability of dividing the resource, but really should be interpreted in terms of the underlying PMF: \eqn{(1-r)^{x-1}r}
 #' 
 #' @param x vector of integers for which to return the probability
 #' @param q vector of integers for which to return the cumulative probability
@@ -23,7 +23,7 @@
 #' @return A numeric vector of length equal to the input
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-# @seealso 
+#' @seealso fitSAD, dgeom
 # @references 
 
 #' @rdname Stick
