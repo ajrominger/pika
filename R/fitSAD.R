@@ -112,11 +112,12 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
     }
     
     fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', 
-                 lower=rep(.Machine$double.eps, 2), upper=c(init.mu*10, init.k*2))
+                 lower=c(.Machine$double.eps, log(.Machine$double.eps)), upper=c(init.mu*10, init.k*2))
     fit$par[2] <- exp(fit$par[2])
     
     return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
 }
+
 
 ## MLE for truncated Poisson
 #' @export
