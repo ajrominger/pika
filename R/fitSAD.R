@@ -22,7 +22,8 @@
 
 fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
     if(length(models) > 1) {
-        ## sapply over models, fitting each one...could be done recursively
+        out <- lapply(models, function(m) fitSAD(x, m)[[1]])
+        # return(out)
     } else {
         out <- switch(models,
                       'fish' = .fitFish(x),
@@ -30,8 +31,18 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
                       'stick' = .fitStick(x),
                       'tnegb' = .fitTnegb(x),
                       'tpois' = .fitTpois(x))
-        ## extract estimate and df from out, nobs from length(x)
+        out$model <- models
+        class(out) <- 'sad'
+        # return(out)
     }
+    
+    if(length(models) == 1) {
+        out <- list(out)
+    }
+    
+    names(out) <- models
+    
+    return(out)
 }
 
 
@@ -42,6 +53,7 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
 
 
 ## MLE for fisher log series
+#' @export
 .fitFish <- function(x) {
     xbar <- mean(x)
     fun <- function(b) -1/log(1 - exp(-b)) * exp(-b)/(1 - exp(-b)) - xbar
@@ -50,13 +62,15 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
 }
 
 ## function to find bounding interval of MLE for fisher
+#' @export
 .fishSolInt <- function(x) {
     up <- 1.1*exp(2*(x-0.1)^-6) * (x-0.1)^-1.25
     lo <- 0.5*exp(2*(x+0.1)^-5) * (x+0.1)^-1.5
     return(c(lo, up))
 }
 
-## MLE for Poisson log normal 
+## MLE for Poisson log normal
+#' @export
 .fitPlnorm <- function(x) {
     fun <- function(par) {
         par[2] <- exp(par[2])
@@ -73,12 +87,16 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
 }
 
 
+## MLE for broken stick
+#' @export
 .fitStick <- function(x) {
     mle <- 1/mean(x)
     
     return(list(MLE=mle, ll=sum(dstick(x, mle, log=TRUE)), df=1, nobs=length(x)))
 }
 
+## MLE for truncated negative binomial
+#' @export
 .fitTnegb <- function(x) {
     fun <- function(par) {
         par[2] <- exp(par[2])
@@ -95,10 +113,11 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
     fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', lower=rep(.Machine$double.eps, 2), upper=c(init.mu*10, init.k*2))
     fit$par[2] <- exp(fit$par[2])
     
-    # return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
-    return(fit)
+    return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
 }
 
+## MLE for truncated Poisson
+#' @export
 .fitTpois <- function(x) {
     mle <- mean(x) + gsl::lambert_W0(-mean(x)*exp(-mean(x)))
     
