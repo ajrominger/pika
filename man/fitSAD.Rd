@@ -12,22 +12,41 @@ fitSAD(x, models = c("fish", "plnorm", "stick", "tnegb", "tpois"))
 \item{models}{character vector of models to be fit (can be more than one model, see examples)}
 }
 \value{
-An object of class \code{logLik} with attributes "\code{df}" and "\code{nobs}."
+A list containing named objects of class \code{sad} with elements
+\describe{
+  \item{\code{MLE}}{The maximum likelihood estimate(s)}
+  \item{\code{ll}}{The maximized log likelihood}
+  \item{\code{df}}{The associated degrees of freedom}
+  \item{\code{nobs}}{The associated number of observations}
+  \item{\code{model}}{The name of the model fit}
+}
 }
 \description{
 \code{fitSAD} uses maximum likelihood to fit one or several SAD models to data
 }
 \details{
-The default behavior fits all models availible in \code{pika}
+The default behavior fits all models availible in \code{pika}:
+\describe{
+ \item{\code{fish}}{Fisher's log series}
+ \item{\code{plnorm}}{Poisson log normal}
+ \item{\code{stick}}{Broken stick}
+ \item{\code{tnegb}}{Truncated negative binomial}
+ \item{\code{tpois}}{Truncated Poisson}
+}
+Exact solutions are availible for \code{tpois} and \code{stick}. In the case of \code{fish},
+optimization is used to solve \eqn{\bar{x} = \frac{-1}{log(1-e^{-\beta})}\frac{e^{-\beta}}{1-e^{-\beta}}}.
+For \code{plnorm} and \code{tnegb} optimization is used to maximize the log likelihood functions based
+directly on \code{dplnorm} and \code{dtnegb}, respectively.
 }
 \examples{
-dplnorm(1:10, 0.5, 0.1)
+x <- rtpois(1000, 2)
+fitSAD(x, models='tpois')
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>
 }
 \seealso{
-logLik
+logLik.sad, dfish, dplnorm, dstick, dtnegb, dtpois
 }
 \keyword{Maximum}
 \keyword{SAD}
