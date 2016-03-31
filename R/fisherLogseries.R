@@ -3,7 +3,7 @@
 #' @description \code{dfish} gives the probability mass function, \code{pfish} gives the cumulative mass 
 #' function, \code{qfish} the quantile function, \code{rfish} randome number generation
 #' 
-#' @details These functions assume infinite support of the Fisher logseries
+#' @details These functions assume infinite support of the Fisher logseries.  An alternate parameterization is used to allow a larger range (i.e. the positive number line) of the parameter \code{beta}: \eqn{\frac{1}{log(1/(1-e^{-\beta}))} * \frac{e^{-\beta x}}{x}}.
 #' 
 #' @param x vector of integers for which to return the probability
 #' @param q vector of integers for which to return the cumulative probability
