@@ -40,17 +40,75 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
 ## helper functions to return likelihood estimates for SADs
 ## ========================================================
 
+
+## MLE for fisher log series
 .fitFish <- function(x) {
     xbar <- mean(x)
-    # fun <- function(p) -1/log(1 - p) * p/(1 - p) - xbar
-    # uniroot(fun, lower=.Machine$double.eps, upper=1-.Machine$double.eps, tol=.Machine$double.eps)
-    fun <- function(b) log((-1/log(1 - exp(-b)) * exp(-b)/(1 - exp(-b)) - xbar)^2)
-    fit <- optimize(fun, lower=xbar^-4, upper=20/xbar, tol=.Machine$double.eps)
+    fun <- function(b) -1/log(1 - exp(-b)) * exp(-b)/(1 - exp(-b)) - xbar
+    fit <- uniroot(fun, .fishSolInt(xbar), tol=.Machine$double.eps)
+    return(list(MLE=fit$root, ll=sum(dfish(x, fit$root, log=TRUE)), df=1, nobs=length(x)))
+}
+
+## function to find bounding interval of MLE for fisher
+.fishSolInt <- function(x) {
+    up <- 1.1*exp(2*(x-0.1)^-6) * (x-0.1)^-1.25
+    lo <- 0.5*exp(2*(x+0.1)^-5) * (x+0.1)^-1.5
+    return(c(lo, up))
+}
+
+## MLE for Poisson log normal 
+.fitPlnorm <- function(x) {
+    fun <- function(par) {
+        par[2] <- exp(par[2])
+        return(-sum(dplnorm(x, par[1], par[2], log=TRUE)))
+    }
     
-    ## consider doing log(b)
+    init.mu <- mean(log(x))
+    init.sig <- log(sd(log(x)))
+    
+    fit <- optim(c(init.mu, init.sig), fun, control=list(reltol=.Machine$double.eps))
+    fit$par[2] <- exp(fit$par[2])
+    
+    return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
 }
 
 
-# x <- rfish(100, 0.01)
-.fitFish(x)
+.fitStick <- function(x) {
+    mle <- 1/mean(x)
+    
+    return(list(MLE=mle, ll=sum(dstick(x, mle, log=TRUE)), df=1, nobs=length(x)))
+}
 
+.fitTnegb <- function(x) {
+    fun <- function(par) {
+        par[2] <- exp(par[2])
+        return(-sum(dtnegb(x, par[1], par[2], log=TRUE)))
+    }
+    
+    init.mu <- mean(x)
+    if(var(x) < mean(x)) {
+        init.k <- log(10000)
+    } else {
+        init.k <- log(mean(x)^2 / (var(x) - mean(x)))
+    }
+    
+    fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', lower=rep(.Machine$double.eps, 2), upper=c(init.mu*10, init.k*2))
+    fit$par[2] <- exp(fit$par[2])
+    
+    # return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
+    return(fit)
+}
+
+
+# x <- rtnegb(10000, 3, 15)
+.fitTnegb(x)
+
+.fitTpois <- function(x) {
+    mle <- mean(x) + gsl::lambert_W0(-mean(x)*exp(-mean(x)))
+    
+    return(list(MLE=mle, ll=sum(dtpois(x, mle, log=TRUE)), df=1, nobs=length(x)))
+}
+
+
+x <- rtpois(10000, 3)
+.fitTpois(x)
