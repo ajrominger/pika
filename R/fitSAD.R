@@ -38,7 +38,7 @@
 #' @seealso logLik.sad, dfish, dplnorm, dstick, dtnegb, dtpois
 # @references 
 
-fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
+fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), keepData=FALSE) {
     if(length(models) > 1) {
         out <- lapply(models, function(m) fitSAD(x, m)[[1]])
         # return(out)
@@ -49,9 +49,11 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois')) {
                       'stick' = .fitStick(x),
                       'tnegb' = .fitTnegb(x),
                       'tpois' = .fitTpois(x))
+        
         out$model <- models
+        if(keepData) out$data <- x
+        
         class(out) <- 'sad'
-        # return(out)
     }
     
     if(length(models) == 1) {
