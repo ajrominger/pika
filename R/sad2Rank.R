@@ -34,4 +34,3 @@ sad2Rank <- function(x, S=NULL) {
     
     return(qfun(seq(1, 1/S, length=S) - 1/(2*S)))
 }
-
