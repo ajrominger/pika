@@ -18,7 +18,7 @@
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
 #' @seealso fitSAD, qqplot
-#' @references 
+# @references 
 
 sad2Rank <- function(x, S=NULL) {
     if(is.null(S)) {
