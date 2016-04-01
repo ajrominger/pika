@@ -3,13 +3,13 @@
 #' @description \code{dtpois} gives the probability mass function, \code{ptpois} gives the cumulative mass 
 #' function, \code{qtpois} the quantile function, \code{rtpois} randome number generation
 #' 
-#' @details These functions assume infinite support of the Poisson log-normal from [1, Inf).
+#' @details These functions assume infinite support of the truncated Poisson from [1, Inf).
 #' 
 #' @param x vector of integers for which to return the probability
 #' @param q vector of integers for which to return the cumulative probability
 #' @param p vector of probabilities for which to return the quantile
 #' @param n number of random replicates
-#' @param lambda mean abundance, see Details
+#' @param lambda mean abundance
 #' @param log logical, should the log probability be used
 #' @param lower.tail logical, should the lower tail be used
 #' 
@@ -23,7 +23,7 @@
 #' @return A numeric vector of length equal to the input
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-# @seealso 
+#' @seealso dpois
 # @references 
 
 #' @rdname TPois

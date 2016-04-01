@@ -18,7 +18,9 @@ rtnegb(n, mu, k)
 \arguments{
 \item{x}{vector of integers for which to return the probability}
 
-\item{mu}{mean log abundance, see Details}
+\item{mu}{mean abundance}
+
+\item{k}{dispersion parameter}
 
 \item{log}{logical, should the log probability be used}
 
@@ -29,8 +31,6 @@ rtnegb(n, mu, k)
 \item{p}{vector of probabilities for which to return the quantile}
 
 \item{n}{number of random replicates}
-
-\item{sig}{standard deviation of log abundance, see Details}
 }
 \value{
 A numeric vector of length equal to the input
@@ -40,13 +40,16 @@ A numeric vector of length equal to the input
 function, \code{qtnegb} the quantile function, \code{rtnegb} randome number generation
 }
 \details{
-These functions assume infinite support of the Poisson log-normal from [1, Inf).
+These functions assume infinite support of the truncated negative binomial from [1, Inf).  The parameterization uses the mean of the untruncated distribution (\eqn{\mu}) and the dispersion (\eqn{k}).  This relates to a Gamma-Poisson mixture as \eqn{trunNB(x; \mu, k) = \int_0^{\inf} trunPois(x; \lambda) Gamma(\lambda; k, k/\mu)}.
 }
 \examples{
 dtnegb(1:10, 0.5, 2)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>
+}
+\seealso{
+dnbinom
 }
 \keyword{SAD}
 \keyword{Truncated}

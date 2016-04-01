@@ -3,14 +3,14 @@
 #' @description \code{dplnorm} gives the probability mass function, \code{pplnorm} gives the cumulative mass 
 #' function, \code{qplnorm} the quantile function, \code{rplnorm} randome number generation
 #' 
-#' @details These functions assume infinite support of the Poisson log-normal from [1, Inf).
+#' @details These functions assume infinite support of the Poisson log-normal from [1, Inf).  Calculations are based on code from the \code{poilog} package, see References
 #' 
 #' @param x vector of integers for which to return the probability
 #' @param q vector of integers for which to return the cumulative probability
 #' @param p vector of probabilities for which to return the quantile
 #' @param n number of random replicates
-#' @param mu mean log abundance, see Details
-#' @param sig standard deviation of log abundance, see Details
+#' @param mu mean log abundance
+#' @param sig standard deviation of log abundance
 #' @param log logical, should the log probability be used
 #' @param lower.tail logical, should the lower tail be used
 #' 
@@ -18,14 +18,13 @@
 #' @export
 #' 
 #' @examples
-#' 
 #' dplnorm(1:10, 0.5, 0.1)
 #' 
 #' @return A numeric vector of length equal to the input
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-# @seealso 
-# @references 
+#' @seealso dpois, dlnorm, dtpois
+#' @references Engen, S., R. Lande, T. Walla & P. J. DeVries. 2002. Analyzing spatial structure of communities using the two-dimensional Poisson lognormal species abundance model. American Naturalist 160: 60-73.
 
 #' @rdname PoisLogNormal
 

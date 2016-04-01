@@ -18,7 +18,7 @@ rtpois(n, lambda)
 \arguments{
 \item{x}{vector of integers for which to return the probability}
 
-\item{lambda}{mean abundance, see Details}
+\item{lambda}{mean abundance}
 
 \item{log}{logical, should the log probability be used}
 
@@ -38,13 +38,16 @@ A numeric vector of length equal to the input
 function, \code{qtpois} the quantile function, \code{rtpois} randome number generation
 }
 \details{
-These functions assume infinite support of the Poisson log-normal from [1, Inf).
+These functions assume infinite support of the truncated Poisson from [1, Inf).
 }
 \examples{
 dtpois(1:10, 2)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>
+}
+\seealso{
+dpois
 }
 \keyword{Poisson,}
 \keyword{SAD}

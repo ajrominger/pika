@@ -38,7 +38,7 @@ A numeric vector of length equal to the input
 function, \code{qfish} the quantile function, \code{rfish} randome number generation
 }
 \details{
-These functions assume infinite support of the Fisher logseries.  An alternate parameterization is used to allow a larger range (i.e. the positive number line) of the parameter \code{beta}: \eqn{\frac{1}{log(1/(1-e^{-\beta}))} * \frac{e^{-\beta x}}{x}}.
+These functions assume infinite support of the Fisher logseries from [1, Inf).  An alternate parameterization is used to allow a larger range (i.e. the positive number line) of the parameter \code{beta}: \eqn{\frac{1}{log(1/(1-e^{-\beta}))} * \frac{e^{-\beta x}}{x}}.
 }
 \examples{
 dfish(1:10, 0.01)

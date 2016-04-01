@@ -38,7 +38,7 @@ A numeric vector of length equal to the input
 function, \code{qstick} the quantile function, \code{rstick} randome number generation
 }
 \details{
-These functions assume infinite support of the Broken stick model. Parameter \code{r} corresponds roughly to the probability of dividing the resource, but really should be interpreted in terms of the underlying PMF: \eqn{(1-r)^{x-1}r}
+These functions assume infinite support of the Broken stick model from [1, Inf). Parameter \code{r} corresponds roughly to the probability of dividing the resource, but really should be interpreted in terms of the underlying PMF: \eqn{(1-r)^{x-1}r}
 }
 \examples{
 dstick(1:10, 0.5)

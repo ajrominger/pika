@@ -18,9 +18,9 @@ rplnorm(n, mu, sig)
 \arguments{
 \item{x}{vector of integers for which to return the probability}
 
-\item{mu}{mean log abundance, see Details}
+\item{mu}{mean log abundance}
 
-\item{sig}{standard deviation of log abundance, see Details}
+\item{sig}{standard deviation of log abundance}
 
 \item{log}{logical, should the log probability be used}
 
@@ -40,13 +40,19 @@ A numeric vector of length equal to the input
 function, \code{qplnorm} the quantile function, \code{rplnorm} randome number generation
 }
 \details{
-These functions assume infinite support of the Poisson log-normal from [1, Inf).
+These functions assume infinite support of the Poisson log-normal from [1, Inf).  Calculations are based on code from the \code{poilog} package, see References
 }
 \examples{
 dplnorm(1:10, 0.5, 0.1)
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>
+}
+\references{
+Engen, S., R. Lande, T. Walla & P. J. DeVries. 2002. Analyzing spatial structure of communities using the two-dimensional Poisson lognormal species abundance model. American Naturalist 160: 60-73.
+}
+\seealso{
+dpois, dlnorm, dtpois
 }
 \keyword{Poisson}
 \keyword{SAD}

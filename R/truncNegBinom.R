@@ -3,14 +3,14 @@
 #' @description \code{dptnegb} gives the probability mass function, \code{ptnegb} gives the cumulative mass 
 #' function, \code{qtnegb} the quantile function, \code{rtnegb} randome number generation
 #' 
-#' @details These functions assume infinite support of the Poisson log-normal from [1, Inf).
+#' @details These functions assume infinite support of the truncated negative binomial from [1, Inf).  The parameterization uses the mean of the untruncated distribution (\eqn{\mu}) and the dispersion (\eqn{k}).  This relates to a Gamma-Poisson mixture as \eqn{trunNB(x; \mu, k) = \int_0^{\inf} trunPois(x; \lambda) Gamma(\lambda; k, k/\mu)}.
 #' 
 #' @param x vector of integers for which to return the probability
 #' @param q vector of integers for which to return the cumulative probability
 #' @param p vector of probabilities for which to return the quantile
 #' @param n number of random replicates
-#' @param mu mean log abundance, see Details
-#' @param sig standard deviation of log abundance, see Details
+#' @param mu mean abundance
+#' @param k dispersion parameter
 #' @param log logical, should the log probability be used
 #' @param lower.tail logical, should the lower tail be used
 #' 
@@ -24,7 +24,7 @@
 #' @return A numeric vector of length equal to the input
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-# @seealso 
+#' @seealso dnbinom
 # @references 
 
 #' @rdname TNegBinom
