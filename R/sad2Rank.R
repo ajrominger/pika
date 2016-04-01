@@ -4,9 +4,8 @@
 #' @description Calculate the rank distribution of a sad object 
 #'
 #' @details
-#' Extracts the predicted rank distribution from a \code{meteDist} object. 
-#' This is effectively the quantile function of the distribution. Used, e.g., 
-#' in \code{plot.meteDist}
+#' Extracts the predicted rank distribution from a \code{sad} object. 
+#' This is effectively the quantile function of the distribution.
 #' 
 #' @param x \code{meteDist} object
 # @keywords 
@@ -18,7 +17,7 @@
 #' @return A vector of predicted ranked abundances
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-#' @seealso fitSAD
+#' @seealso fitSAD, qqplot
 #' @references 
 
 sad2Rank <- function(x, S=NULL) {
