@@ -88,11 +88,8 @@ plot.sad <- function(x, ptype=c('cdf', 'rad'), ...) {
     
     if(!is.null(x$data)) {
         if(ptype=='cdf') {
-            tabz <- table(x$data)
-            yval <- cumsum(as.numeric(tabz))/sum(as.numeric(tabz))
-            xval <- as.numeric(names(tabz))
-            
-            plot(xval, yval, ...)
+            thisCDF <- .ecdf(x$data)
+            plot(thisCDF[, 1], thisCDF[, 2], ...)
         } else {
             plot(sort(x$data, decreasing=TRUE))
         }
@@ -106,4 +103,17 @@ plot.sad <- function(x, ptype=c('cdf', 'rad'), ...) {
 #         }
 #         if(ptype)
 #     }
+}
+
+
+## =================================
+## simplified empirical CDF function
+## =================================
+#' @export
+.ecdf <- function(x) {
+    tabz <- table(x)
+    yval <- cumsum(as.numeric(tabz))/sum(as.numeric(tabz))
+    xval <- as.numeric(names(tabz))
+    
+    return(cbind(xval, yval))
 }
