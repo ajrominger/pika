@@ -28,22 +28,22 @@
 #' @rdname getDistFuns
 getdfun <- function(s) {
     switch(s$model, 
-           'fish' = function(x, ...) pfish(x, s$MLE, ...),
-           'plnorm' = function(x, ...) pplnorm(x, s$MLE[1], s$MLE[2], ...),
-           'stick' = function(x, ...) pstick(x, s$MLE, ...),
-           'tnegb' = function(x, ...) ptnegb(x, s$MLE[1], s$MLE[2], ...),
-           'tpois' = function(x, ...) ptpois(x, s$MLE, ...))
+           'fish' = function(x, ...) dfish(x, s$MLE, ...),
+           'plnorm' = function(x, ...) dplnorm(x, s$MLE[1], s$MLE[2], ...),
+           'stick' = function(x, ...) dstick(x, s$MLE, ...),
+           'tnegb' = function(x, ...) dtnegb(x, s$MLE[1], s$MLE[2], ...),
+           'tpois' = function(x, ...) dtpois(x, s$MLE, ...))
 }
 
 #' @export
 #' @rdname getDistFuns
 getpfun <- function(s) {
     switch(s$model, 
-           'fish' = function(q) pfish(q, s$MLE, ...),
-           'plnorm' = function(q) pplnorm(q, s$MLE[1], s$MLE[2], ...),
-           'stick' = function(q) pstick(q, s$MLE, ....),
-           'tnegb' = function(q) ptnegb(q, s$MLE[1], s$MLE[2], ....),
-           'tpois' = function(q) ptpois(q, s$MLE, ....))
+           'fish' = function(q, ...) pfish(q, s$MLE, ...),
+           'plnorm' = function(q, ...) pplnorm(q, s$MLE[1], s$MLE[2], ...),
+           'stick' = function(q, ...) pstick(q, s$MLE, ...),
+           'tnegb' = function(q, ...) ptnegb(q, s$MLE[1], s$MLE[2], ...),
+           'tpois' = function(q, ...) ptpois(q, s$MLE, ...))
 }
 
 
@@ -51,20 +51,20 @@ getpfun <- function(s) {
 #' @rdname getDistFuns
 getqfun <- function(s) {
     switch(s$model, 
-           'fish' = function(p) qfish(p, s$MLE, ...),
-           'plnorm' = function(p) qplnorm(p, s$MLE[1], s$MLE[2], ...),
-           'stick' = function(p) qstick(p, s$MLE, ....),
-           'tnegb' = function(p) qtnegb(p, s$MLE[1], s$MLE[2], ....),
-           'tpois' = function(p) qtpois(p, s$MLE, ....))
+           'fish' = function(p, ...) qfish(p, s$MLE, ...),
+           'plnorm' = function(p, ...) qplnorm(p, s$MLE[1], s$MLE[2], ...),
+           'stick' = function(p, ...) qstick(p, s$MLE, ...),
+           'tnegb' = function(p, ...) qtnegb(p, s$MLE[1], s$MLE[2], ...),
+           'tpois' = function(p, ...) qtpois(p, s$MLE, ...))
 }
 
 #' @export
 #' @rdname getDistFuns
 getrfun <- function(s) {
     switch(s$model, 
-           'fish' = function(n) rfish(n, s$MLE, ...),
-           'plnorm' = function(n) rplnorm(n, s$MLE[1], s$MLE[2], ...),
-           'stick' = function(n) rstick(n, s$MLE, ....),
-           'tnegb' = function(n) rtnegb(n, s$MLE[1], s$MLE[2], ....),
-           'tpois' = function(n) rtpois(n, s$MLE, ....))
+           'fish' = function(n) rfish(n, s$MLE),
+           'plnorm' = function(n) rplnorm(n, s$MLE[1], s$MLE[2]),
+           'stick' = function(n) rstick(n, s$MLE),
+           'tnegb' = function(n) rtnegb(n, s$MLE[1], s$MLE[2]),
+           'tpois' = function(n) rtpois(n, s$MLE))
 }
