@@ -30,7 +30,7 @@
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-#' @seealso fitSAD
+#' @seealso fitSAD, logLik
 # @references
 
 logLik.sad <- function(x) {
@@ -43,7 +43,7 @@ logLik.sad <- function(x) {
 }
 
 
-#==============================================================================
+#======================================================
 #' @rdname logLik
 #' @export 
 
@@ -53,43 +53,26 @@ logLikZ <- function(x, ...) {
 
 #' @rdname logLik
 #' @export 
-
 #' @importFrom stats logLik sd
-logLikZ.meteDist <- function(x, nrep=999, return.sim=FALSE, ...) {
+
+logLikZ.sad <- function(x, nrep=1000, return.sim=FALSE, ...) {
     lik.obs <- logLik(x)
-    state.var <- sum(x$data)
+    n <- x$nobs
+    rfun <- getrfun(x)
+    dfun <- getdfun(x)
     
-    lik.sim <- c()
-    cat('simulating data that conform to state variables: \n')
-    for(i in 1:10) {
-        cat(sprintf('attempt %s \n', i))
-        this.sim <- replicate(100*nrep, {
-            new.dat <- x$r(length(x$data))
-            if(abs(sum(new.dat) - state.var) < 0.001*state.var) {
-                return(NA)
-            } else {
-                return(sum(x$d(new.dat, log=TRUE)))
-            }
-        })
-        
-        lik.sim <- c(lik.sim, this.sim[!is.na(this.sim)])
-        if(length(lik.sim) >= nrep) break
-    }
+    lik.sim <- replicate(nrep, {
+        newx <- rfun(n)
+        sum(dfun(newx, log=TRUE))
+    })
     
-    if(length(lik.sim) >= nrep) {
-        lik.sim <- c(lik.sim[1:nrep], lik.obs)
+    z <- ((lik.obs - mean(lik.sim)) / sd(lik.sim))^2
+    
+    if(return.sim) {
+        lik.sim <- ((lik.sim - mean(lik.sim)) / sd(lik.sim))^2
     } else {
-        warning(sprintf('%s (not %s as desired) simulated replicates found that match the state variables', 
-                        length(lik.sim), nrep))
-        lik.sim <- c(lik.sim, lik.obs)
+        lik.sim <- NULL
     }
     
-    z <- (lik.obs-mean(lik.sim))/sd(lik.sim)
-    
-    if(!return.sim) lik.sim <- NULL
-    
-    return(list(z=z, 
-                obs=lik.obs,
-                sim=lik.sim))
-    
+    return(list(z=z, obs=lik.obs, sim=lik.sim))
 }
