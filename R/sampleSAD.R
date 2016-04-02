@@ -28,16 +28,22 @@
 # @references
 
 sample.sad <- function(x, size, replace=FALSE, prob=NULL) {
+    if(class(x) == 'sad') x <- x$data
+    
+    spp <- rep(1:length(x), x)
+    
     if(length(prob) >= 1) {
         prob[prob > 1] <- 1
-        if(length(prob) == 1) size <- sum(x)*prob
+        
+        if(length(prob) == 1) {
+            size <- sum(x)*prob
+            samp <- sample(spp, size=size, replace=replace)
+        } else {
+            samp <- sample(spp, size=size, replace=replace, prob=rep(prob, x))
+        }
     } else {
-        prob <- 1
+        samp <- sample(spp, size=size, replace=replace)
     }
-    
-    spp <- rep(1:length(x$data), x$data)
-    
-    samp <- sample(spp, size=size, replace=replace, prob=rep(prob, x$data))
     
     return(as.numeric(table(samp)))
 }
