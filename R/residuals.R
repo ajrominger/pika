@@ -102,7 +102,8 @@ mseZ <- function(x, ...) {
 #' @export 
 #' @importFrom stats sd
 mseZ.sad <- function(x, nrep, return.sim=FALSE, ...) {
-    mse.obs <- mse.sad(x, ...)
+    this.mseFun <- function(x) mse(x, ...)
+    mse.obs <- this.mseFun(x)
     
     rfun <- getrfun(x)
     n <- x$nobs
@@ -110,7 +111,7 @@ mseZ.sad <- function(x, nrep, return.sim=FALSE, ...) {
     
     mse.sim <- replicate(nrep, {
         newx$data <- rfun(n)
-        mse.sad(newx, ...)
+        this.mseFun(newx)
     })
     
     z <- ((mse.obs - mean(mse.sim)) / sd(mse.sim))^2
