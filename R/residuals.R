@@ -15,8 +15,8 @@
 #' 
 #' @param x an \code{sad} object
 #' @param type 'rank' or 'cumulative'
-#' @param relative logical; if true use relative MSE
-#' @param log logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale.
+#' @param relative logical, if true use relative MSE; defaults to TRUE
+#' @param log logical, if TRUE calculate MSE on log scale; defaults to FALSE
 #' @param nrep number of simulations from the fitted METE distribution 
 #' @param return.sim logical; return the simulated liklihood values
 #' @param ... arguments to be passed to methods
@@ -48,19 +48,17 @@ residuals.sad <- function(x, type=c("rank","cumulative"),
     type <- match.arg(type, choices=c("rank","cumulative"))
     
     if(type=="rank") {
-        obs <- x$data
+        obs <- sort(x$data, decreasing=TRUE)
         pred <- sad2Rank(x)
+        if(log) {
+            obs <- log(obs)
+            pred <- log(pred)
+        }
     } else if(type=="cumulative") {
         obs <- .ecdf(x$data)
+        pfun <- getpfun(x)
         
-        pfun <- switch(x$model, 
-                       'fish' = function(q) pfish(q, x$MLE, log=log),
-                       'plnorm' = function(q) pplnorm(q, x$MLE[1], x$MLE[2], log=log),
-                       'stick' = function(q) pstick(q, x$MLE, log=log),
-                       'tnegb' = function(q) ptnegb(q, x$MLE[1], x$MLE[2], log=log),
-                       'tpois' = function(q) ptpois(q, x$MLE, log=log))
-        
-        pred <- pfun(obs[, 1])
+        pred <- pfun(obs[, 1], log=log)
         if(log) obs <- log(obs[, 2])
         else obs <- obs[,2]
     }
@@ -72,7 +70,7 @@ residuals.sad <- function(x, type=c("rank","cumulative"),
 }
 
 
-#=======================================================================
+## ================================================
 
 #' @rdname residuals
 #' @export
@@ -81,29 +79,18 @@ mse <- function(x, ...) {
     UseMethod('mse')
 }
 
-# @rdname residuals
-# @export 
-# @importFrom stats residuals 
-# mse.meteDist <- function(x, type=c("rank","cumulative"),
-#                          relative=TRUE, log=FALSE, ...) {
-#     type <- match.arg(type, choices=c("rank","cumulative"))
-#     
-#     resid <- residuals(x, type, relative, log)
-#     
-#     return(mean(resid^2))
-# }
-
 #' @rdname residuals
 #' @export 
 #' @importFrom stats residuals
-mse.sad <- function(x,...) {
+mse.sad <- function(x, ...) {
     resid <- residuals(x, ...)
     
     return(mean(resid^2))
 }
 
 
-#=======================================================================
+## ================================================
+
 #' @rdname residuals
 #' @export
 
@@ -114,63 +101,25 @@ mseZ <- function(x, ...) {
 #' @rdname residuals
 #' @export 
 #' @importFrom stats sd
-mseZ.sad <- function(x, nrep, return.sim=FALSE,
-                     type=c("rank","cumulative"), 
-                     relative=TRUE, log=FALSE, ...) {
+mseZ.sad <- function(x, nrep, return.sim=FALSE, ...) {
+    mse.obs <- mse.sad(x, ...)
     
-    if(type=='rank') {
-        rad <- meteDist2Rank(x)
-        thr <- function(dat) {
-            res <- sort(dat, TRUE) - rad
-            if(relative) res <- res/rad
-            
-            return(mean(res^2))
-        }
-    } else {
-        obs <- .ecdf(dat)
-        thr <- function(dat) {
-            if(log) obs[, 2] <- log(obs[, 2])
-            pred <- x$p(obs[, 1], log.p=log)
-            res <- obs[, 2] - pred
-            if(relative) res <- res/abs(pred)
-            
-            return(mean(res^2))
-        }
-    }
+    rfun <- getrfun(x)
+    n <- x$nobs
+    newx <- x
     
-    mse.obs <- mse.meteDist(x, type, relative, log)
-    state.var <- sum(x$data)
+    mse.sim <- replicate(nrep, {
+        newx$data <- rfun(n)
+        mse.sad(newx, ...)
+    })
     
-    mse.sim <- c()
-    cat('simulating data that conform to state variables: \n')
-    for(i in 1:10) {
-        cat(sprintf('attempt %s \n', i))
-        this.sim <- replicate(100*nrep, {
-            new.dat <- x$r(length(x$data))
-            if(abs(sum(new.dat) - state.var) < 0.001*state.var) {
-                return(NA)
-            } else {
-                return(thr(new.dat))
-            }
-        })
-        
-        mse.sim <- c(mse.sim, this.sim[!is.na(this.sim)])
-        if(length(mse.sim) >= nrep) break
-    }
-    
-    if(length(mse.sim) >= nrep) {
-        mse.sim <- c(mse.sim[1:nrep], mse.obs)
-    } else {
-        warning(sprintf('%s (not %s as desired) simulated replicates found that match the state variables', 
-                        length(lik.sim), nrep))
-        lik.sim <- c(mse.sim, mse.obs)
-    }
+    z <- ((mse.obs - mean(mse.sim)) / sd(mse.sim))^2
     
     if(return.sim) {
-        return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim), 
-                    obs=mse.obs,
-                    sim=mse.sim))
+        mse.sim <- ((mse.sim - mean(mse.sim)) / sd(mse.sim))^2
     } else {
-        return(list(z=(mse.obs-mean(mse.sim))/sd(mse.sim)))
+        mse.sim <- NULL
     }
+    
+    return(list(z=z, obs=mse.obs, sim=mse.sim))
 }
