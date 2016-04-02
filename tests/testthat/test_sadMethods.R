@@ -74,3 +74,15 @@ test_that('get distrib funs works', {
     expect_equal(getqfun(xfit)(1/(1:10)), qtpois(1/(1:10), xfit$MLE))
     expect_equal(length(getrfun(xfit)(10)), 10)
 })
+
+
+## =================================
+## sample method
+## =================================
+
+test_that('sample method works', {
+    x <- rtpois(500, 3)
+    sad1 <- fitSAD(x, models='tpois', keepData=TRUE)[[1]]
+    xsamp <- sample.sad(x, 500)
+    sum(xsamp)
+})
