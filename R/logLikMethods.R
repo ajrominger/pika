@@ -74,5 +74,5 @@ logLikZ.sad <- function(x, nrep=1000, return.sim=FALSE, ...) {
         lik.sim <- NULL
     }
     
-    return(list(z=z, obs=lik.obs, sim=lik.sim))
+    return(list(z=as.numeric(z), obs=lik.obs, sim=lik.sim))
 }
