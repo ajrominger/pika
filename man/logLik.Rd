@@ -3,14 +3,14 @@
 \name{logLik.sad}
 \alias{logLik.sad}
 \alias{logLikZ}
-\alias{logLikZ.meteDist}
+\alias{logLikZ.sad}
 \title{Log likelihood methods for objects of class \code{sad}}
 \usage{
 \method{logLik}{sad}(x)
 
 logLikZ(x, ...)
 
-\method{logLikZ}{meteDist}(x, nrep = 999, return.sim = FALSE, ...)
+\method{logLikZ}{sad}(x, nrep = 1000, return.sim = FALSE, ...)
 }
 \arguments{
 \item{x}{an object of class \code{sad}}
@@ -48,7 +48,7 @@ logLik(sad1[[1]])
 Andy Rominger <ajrominger@gmail.com>
 }
 \seealso{
-fitSAD
+fitSAD, logLik
 }
 \keyword{SAD,}
 \keyword{abundance,}

@@ -17,17 +17,16 @@ mse(x, ...)
 
 mseZ(x, ...)
 
-\method{mseZ}{sad}(x, nrep, return.sim = FALSE, type = c("rank",
-  "cumulative"), relative = TRUE, log = FALSE, ...)
+\method{mseZ}{sad}(x, nrep, return.sim = FALSE, ...)
 }
 \arguments{
 \item{x}{an \code{sad} object}
 
 \item{type}{'rank' or 'cumulative'}
 
-\item{relative}{logical; if true use relative MSE}
+\item{relative}{logical, if true use relative MSE; defaults to TRUE}
 
-\item{log}{logical; if TRUE calculate MSE on logged distirbution. If FALSE use arithmetic scale.}
+\item{log}{logical, if TRUE calculate MSE on log scale; defaults to FALSE}
 
 \item{...}{arguments to be passed to methods}
 
