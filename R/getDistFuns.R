@@ -20,9 +20,6 @@
 #' @author Andy Rominger <ajrominger@@gmail.com>
 #' @seealso fitSAD
 # @references
-## =========================================================
-## 
-## =========================================================
 
 #' @export
 #' @rdname getDistFuns
