@@ -25,3 +25,18 @@ test_that('logLik.sad works', {
     expect_is(logLik(xfit), 'logLik')
 })
 
+
+
+## =================================
+## get distrib funs
+## =================================
+
+test_that('get distrib funs works', {
+    x <- rtpois(100, 2)
+    xfit <- fitSAD(x, 'tpois', keepData=TRUE)[[1]]
+    expect_is(getdfun(xfit), 'function')
+    expect_equal(getdfun(xfit)(1:10), dtpois(1:10, xfit$MLE))
+    expect_equal(getpfun(xfit)(1:10), ptpois(1:10, xfit$MLE))
+    expect_equal(getqfun(xfit)(1/(1:10)), qtpois(1/(1:10), xfit$MLE))
+    expect_equal(length(getrfun(xfit)(10)), 10)
+})
