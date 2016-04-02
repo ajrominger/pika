@@ -23,6 +23,22 @@ test_that('logLik.sad works', {
     x <- rtpois(100, la)
     xfit <- fitSAD(x, 'tpois', keepData=TRUE)[[1]]
     expect_is(logLik(xfit), 'logLik')
+    z <- logLikZ(xfit, nrep=10, return.sim=TRUE)
+    expect_equal(length(z), 3)
+    expect_equal(z$obs, logLik(xfit))
+    expect_equal(length(z$sim), 10)
+})
+
+
+## =================================
+## residuals and mse
+## =================================
+
+test_that('logLik.sad works', {
+    la <- 2
+    x <- rtpois(100, la)
+    xfit <- fitSAD(x, 'tpois', keepData=TRUE)[[1]]
+    expect_is(logLik(xfit), 'logLik')
 })
 
 
