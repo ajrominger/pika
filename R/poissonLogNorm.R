@@ -43,24 +43,28 @@ dplnorm <- function(x, mu, sig, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname PoisLogNormal
 
 pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
     out <- numeric(length(q))
+    newq <- floor(q)
+    newq[newq < 1] <- 1
     
     if(length(q) > 1) {
-        temp <- cumsum(poilog::dpoilog(1:floor(max(q)), mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
-        out[q %% 1 == 0 & q >= 1] <- temp[q %% 1 == 0 & q >= 1]
+        temp <- cumsum(poilog::dpoilog(1:max(newq), mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+        out <- temp[newq]
     } else {
-        if(q %% 1 == 0 & q >= 1)
-            out <- sum(poilog::dpoilog(1:q, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
+        out <- sum(poilog::dpoilog(1:newq, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig))
     }
     
-    if(any(q %% 1 != 0)) {
-        for(bad in q[q %% 1 != 0]) {
-            warning(sprintf('non-integer q = %s', bad))
-        }
-    }
+    out[q < 1] <- 0
+    
+#     if(any(q %% 1 != 0)) {
+#         for(bad in q[q %% 1 != 0]) {
+#             warning(sprintf('non-integer q = %s', bad))
+#         }
+#     }
     
     if(!lower.tail) out <- 1 - out
     if(log) out <- log(out)
