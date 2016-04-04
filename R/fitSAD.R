@@ -118,7 +118,10 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
 .fitTnegb <- function(x) {
     fun <- function(par) {
         par[2] <- exp(par[2])
-        return(-sum(dtnegb(x, par[1], par[2], log=TRUE)))
+        out <- -sum(dtnegb(x, par[1], par[2], log=TRUE))
+        if(!is.finite(out)) out <- .Machine$double.xmax^0.25
+        
+        return(out)
     }
     
     init.mu <- mean(x)
@@ -128,8 +131,10 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
         init.k <- log(mean(x)^2 / (var(x) - mean(x)))
     }
     
+    print(c(init.mu, init.k))
+    
     fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', 
-                 lower=c(.Machine$double.eps, log(.Machine$double.eps)), upper=c(init.mu*10, init.k*2))
+                 lower=c(.Machine$double.eps, log(.Machine$double.eps)), upper=c(init.mu*10, init.k+10))
     fit$par[2] <- exp(fit$par[2])
     
     return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
