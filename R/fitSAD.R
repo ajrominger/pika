@@ -131,8 +131,6 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
         init.k <- log(mean(x)^2 / (var(x) - mean(x)))
     }
     
-    print(c(init.mu, init.k))
-    
     fit <- optim(c(init.mu/2, init.k/2), fun, method='L-BFGS-B', 
                  lower=c(.Machine$double.eps, log(.Machine$double.eps)), upper=c(init.mu*10, init.k+10))
     fit$par[2] <- exp(fit$par[2])
