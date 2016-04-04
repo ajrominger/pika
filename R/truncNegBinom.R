@@ -42,6 +42,7 @@ dtnegb <- function(x, mu, k, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname TNegBinom
 
 ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
@@ -57,6 +58,7 @@ ptnegb <- function(q, mu, k, lower.tail=TRUE, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname TNegBinom
 
 qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
@@ -67,6 +69,7 @@ qtnegb <- function(p, mu, k, lower.tail=TRUE, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname TNegBinom
 
 rtnegb <- function(n, mu, k) {

@@ -41,6 +41,7 @@ dtpois <- function(x, lambda, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname TPois
 
 ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
@@ -56,6 +57,8 @@ ptpois <- function(q, lambda, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
+
+#' @export
 #' @rdname TPois
 
 qtpois <- function(p, lambda, lower.tail=TRUE, log=FALSE) {
@@ -66,6 +69,7 @@ qtpois <- function(p, lambda, lower.tail=TRUE, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname TPois
 
 rtpois <- function(n, lambda) {

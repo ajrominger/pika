@@ -71,6 +71,7 @@ pplnorm <- function(q, mu, sig, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
+#' @export
 #' @rdname PoisLogNormal
 
 qplnorm <- function(p, mu, sig, lower.tail=TRUE, log=FALSE) {
@@ -86,7 +87,7 @@ qplnorm <- function(p, mu, sig, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
-
+#' @export
 #' @rdname PoisLogNormal
 
 rplnorm <- function(n, mu, sig) {
@@ -106,6 +107,7 @@ rplnorm <- function(n, mu, sig) {
 ## =================================
 
 ## inverse cdf of the poisson log normal
+#' @export
 .plnormcdfinv <- function(p, mu, sig) {
     this.cdf <- c(0, cumsum(poilog::dpoilog(1:10000, mu, sig)) / (1 - poilog::dpoilog(0, mu, sig)))
     approx(x=this.cdf, y=0:10000,

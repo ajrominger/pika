@@ -46,6 +46,7 @@ dstick <- function(x, r, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname Stick
 
 pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
@@ -66,6 +67,8 @@ pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
+
+#' @export
 #' @rdname Stick
 
 qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
@@ -82,6 +85,7 @@ qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname Stick
 
 rstick <- function(n, r) {
@@ -93,6 +97,7 @@ rstick <- function(n, r) {
 ## helper functions
 ## =================================
 
+#' @export
 ## inverse cdf of the broken stick
 .stickcdfinv <- function(p, r) {
     log(1 - p) / log(1 - r)

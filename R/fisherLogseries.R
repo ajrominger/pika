@@ -46,6 +46,7 @@ dfish <- function(x, beta, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname Fisher
 
 pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
@@ -66,6 +67,8 @@ pfish <- function(q, beta, lower.tail=TRUE, log=FALSE) {
     return(out)
 }
 
+
+#' @export
 #' @rdname Fisher
 
 qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
@@ -82,6 +85,7 @@ qfish <- function(p, beta, lower.tail=TRUE, log=FALSE) {
 }
 
 
+#' @export
 #' @rdname Fisher
 
 rfish <- function(n, beta) {
@@ -94,16 +98,19 @@ rfish <- function(n, beta) {
 ## =================================
 
 ## solution to the beta function using the hypergeometic for better accuracy
+#' @export
 .betax <- function(x, a, b) {
     1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
 }
 
 ## cdf of the fisher log series
+#' @export
 .fishcdf <- function(x, beta) {
     1 + .betax(exp(-beta), x+1, 0) / log(1 - exp(-beta))
 }
 
 ## inverse cdf of the fisher log series
+#' @export
 .fishcdfinv <- function(p, beta) {
     approx(x=.fishcdf(0:10000, beta), y=0:10000, xout=p, method='constant', 
            yleft=NaN, yright=Inf, f=1)$y
