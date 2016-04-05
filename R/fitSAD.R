@@ -92,7 +92,9 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
 .fitPlnorm <- function(x) {
     fun <- function(par) {
         par[2] <- exp(par[2])
-        return(-sum(dplnorm(x, par[1], par[2], log=TRUE)))
+        out <- -sum(dplnorm(x, par[1], par[2], log=TRUE))
+        if(!is.finite(out)) out <- .Machine$double.xmax^0.25
+        return(out)
     }
     
     init.mu <- mean(log(x))
