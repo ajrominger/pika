@@ -75,7 +75,7 @@ qstick <- function(p, r, lower.tail=TRUE, log=FALSE) {
     if(log) p <- exp(p)
     if(!lower.tail) p <- 1 - p
     
-    out <- .stickcdfinv(p, r)
+    out <- floor(.stickcdfinv(p, r))
     
     if(any(is.nan(out))) {
         warning('NaNs produced')
