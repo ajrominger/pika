@@ -89,22 +89,24 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
 
 ## MLE for Poisson log normal
 #' @export
-.fitPlnorm <- function(x) {
-    fun <- function(par) {
-        par[2] <- exp(par[2])
-        out <- -sum(dplnorm(x, par[1], par[2], log=TRUE))
-        if(!is.finite(out)) out <- .Machine$double.xmax^0.25
-        return(out)
-    }
+# .fitPlnorm <- function(x) {
+#     fun <- function(par) {
+#         par[2] <- exp(par[2])
+#         out <- -sum(dplnorm(x, par[1], par[2], log=TRUE))
+#         if(!is.finite(out)) out <- .Machine$double.xmax^0.25
+#         return(out)
+#     }
+#     
+#     init.mu <- mean(log(x))
+#     init.sig <- log(sd(log(x)))
+#     
+#     fit <- optim(c(init.mu, init.sig), fun, method='L-BFGS-B', 
+#                  lower=c(0, log(.Machine$double.eps)), upper=2*c(init.mu, init.sig))
+#     fit$par[2] <- exp(fit$par[2])
     
-    init.mu <- mean(log(x))
-    init.sig <- log(sd(log(x)))
+    fit <- poilog::poilogMLE(x)
     
-    fit <- optim(c(init.mu, init.sig), fun, method='L-BFGS-B', 
-                 lower=c(0, log(.Machine$double.eps)), upper=2*c(init.mu, init.sig))
-    fit$par[2] <- exp(fit$par[2])
-    
-    return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
+    return(list(MLE=fit$par, ll=-fit$logLvalue, df=2, nobs=length(x)))
 }
 
 ## MLE for broken stick
