@@ -50,15 +50,8 @@ dstick <- function(x, r, log=FALSE) {
 #' @rdname Stick
 
 pstick <- function(q, r, lower.tail=TRUE, log=FALSE) {
-    out <- 1 - (1-r)^q
-    
-    if(any(q %% 1 != 0)) {
-        for(bad in q[q %% 1 != 0]) {
-            warning(sprintf('non-integer q = %s', bad))
-        }
-        
-        out[q %% 1 != 0] <- 0
-    }
+    Q <- ceiling(q)
+    out <- 1 - (1-r)^Q
     
     out[q < 1] <- 0
     
