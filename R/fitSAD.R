@@ -40,7 +40,7 @@
 
 fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), keepData=FALSE) {
     if(length(models) > 1) {
-        out <- lapply(models, function(m) fitSAD(x, m)[[1]])
+        out <- lapply(models, function(m) fitSAD(x, m, keepData)[[1]])
         # return(out)
     } else {
         out <- switch(models,
