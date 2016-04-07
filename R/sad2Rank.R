@@ -22,8 +22,8 @@
 
 sad2Rank <- function(x, S=NULL) {
     if(is.null(S)) {
-        S <- length(x$data)
-        if(S == 0) stop('data not provided in sad object "x"')
+        S <- x$nobs
+        if(S == 0 | is.null(S)) stop('nobs or data not provided in sad object "x"')
     }
     
     qfun <- switch(x$model,
