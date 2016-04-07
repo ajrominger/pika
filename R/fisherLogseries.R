@@ -97,17 +97,42 @@ rfish <- function(n, beta) {
 ## helper functions
 ## =================================
 
+## fisher pdf
+.fishpdf <- function(x, beta) {
+    1/log(1/(1-exp(-beta))) * exp(-beta*x)/x
+}
+
 ## solution to the beta function using the hypergeometic for better accuracy
 #' @export
 .betax <- function(x, a, b) {
+    ## x = exp(-beta)
+    ## a = data value + 1
+    ## b = 0
+    ## ==> in standard notation 2F1(a, b; c; z)
+    ## a = data value + 1
+    ## b = 1
+    ## c = data value + 2
+    ## z = exp(-beta)
     1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
 }
 
 ## cdf of the fisher log series
 #' @export
 .fishcdf <- function(x, beta) {
-    1 + .betax(exp(-beta), x+1, 0) / log(1 - exp(-beta))
+    ## crit is based on empirically derived bounds of convergance of gsl::hyperg_2F1
+    crit <- x > exp(-36)*exp(-beta)^-46653
+    out <- numeric(length(x))
+    
+    if(any(!crit)) {
+        out[!crit] <- 1 + .betax(exp(-beta), x[!crit]+1, 0) / log(1 - exp(-beta))
+        out[crit] <- out[!crit][sum(!crit, na.rm=TRUE)] + cumsum(.fishpdf(x[crit], beta))
+    } else {
+        out[crit] <- cumsum(.fishpdf(x[crit], beta))
+    }
+    
+    return(out)
 }
+
 
 ## inverse cdf of the fisher log series
 #' @export
