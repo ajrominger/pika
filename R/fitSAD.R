@@ -89,7 +89,7 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
 
 ## MLE for Poisson log normal
 #' @export
- .fitPlnorm <- function(x) {
+.fitPlnorm <- function(x) {
 #     fun <- function(par) {
 #         par[2] <- exp(par[2])
 #         out <- -sum(dplnorm(x, par[1], par[2], log=TRUE))
@@ -106,7 +106,7 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
     
     fit <- poilog::poilogMLE(x)
     
-    return(list(MLE=fit$par, ll=-fit$logLvalue, df=2, nobs=length(x)))
+    return(list(MLE=fit$par, ll=fit$logLval, df=2, nobs=length(x)))
 }
 
 ## MLE for broken stick
