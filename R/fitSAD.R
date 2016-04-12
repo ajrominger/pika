@@ -17,6 +17,7 @@
 #' 
 #' @param x vector of integers representing a sample of species abundances
 #' @param models character vector of models to be fit (can be more than one model, see examples)
+#' @param keepData logical, should the data be stored with the fitted \code{sad} object
 #' 
 #' @keywords Maximum likelihood, species abundance, SAD
 #' @export

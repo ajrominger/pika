@@ -11,6 +11,8 @@ fitSAD(x, models = c("fish", "plnorm", "stick", "tnegb", "tpois"),
 \item{x}{vector of integers representing a sample of species abundances}
 
 \item{models}{character vector of models to be fit (can be more than one model, see examples)}
+
+\item{keepData}{logical, should the data be stored with the fitted \code{sad} object}
 }
 \value{
 A list containing named objects of class \code{sad} with elements
