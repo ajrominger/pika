@@ -51,7 +51,7 @@ print.sad <- function(x) {
 #' @seealso fitSAD
 # @references
 
-plot.sad <- function(x, ptype=c('cdf', 'rad'), ...) {
+plot.sad <- function(x, ptype=c('cdf', 'rad'), thr.col='red', ...) {
     ptype <- match.arg(ptype, c('cdf', 'rad'))
     
     if(!is.null(x$data)) {
@@ -64,11 +64,16 @@ plot.sad <- function(x, ptype=c('cdf', 'rad'), ...) {
     }
     
 #     if(!is.null(x$model)) {
-#         if(dev.cur() == 1) {
-#             plotfun <- function(x, y) plot(x, y, ...)
+#         if(ptype == 'cdf') {
+#             'stub'
 #         } else {
-#             plotfun <- function(x, y) lines(x, y)
+#             'stub'
 #         }
-#         if(ptype)
+#         
+#         if(dev.cur() == 1) {
+#             plot() # set-up plotting window
+#         } else {
+#             lines()
+#         }
 #     }
 }
