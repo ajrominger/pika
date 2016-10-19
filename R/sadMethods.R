@@ -21,8 +21,12 @@
 # @references
 
 print.sad <- function(x) {
-    cat(sprintf('species abundance distribution modeled by "%s" with parameter%s \n', x$model, ifelse(length(x$MLE > 1), '', 's')))
-    print(x$MLE)
+    if(is.null(x$model)) {
+        cat('emperical species abundance distribution \n')
+    } else {
+        cat(sprintf('species abundance distribution modeled by "%s" with parameter%s \n', x$model, ifelse(length(x$MLE > 1), '', 's')))
+        print(x$MLE)
+    }
     cat(sprintf('%s data', ifelse(is.null(x$data), 'does not include', 'includes')))
     invisible(x)
 }
