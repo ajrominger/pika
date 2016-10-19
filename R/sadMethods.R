@@ -58,33 +58,29 @@ print.sad <- function(x) {
 
 plot.sad <- function(x, ptype=c('cdf', 'rad'), thr.col='red', ...) {
     ptype <- match.arg(ptype, c('cdf', 'rad'))
-    
     if(!is.null(x$data)) {
-        if(ptype=='cdf') {
+        if(ptype == 'cdf') {
             thisCDF <- .ecdf(x$data)
+            n <- seq(min(x$data), max(x$data), by = 1)
+            
             plot(thisCDF[, 1], thisCDF[, 2], xlab = 'Abundance', ylab = 'Cumulative probability', ...)
         } else {
             plot(sort(x$data, decreasing=TRUE), xlab = 'Rank', ylab = 'Abundance', ...)
         }
+    } else {
+        if(ptype == 'cdf') {
+            n <- seq(1, getqfun(x)(0.999), by = 1)
+            plot(n, getpfun(x)(n), type = 'n', xlab = 'Abundance', ylab = 'Cumulative probability', ...)
+        } else {
+            plot(sad2Rank(x), type = 'n', xlab = 'Rank', ylab = 'Abundance', ...)
+        }
     }
     
     if(!is.null(x$model)) {
-        if(dev.cur() == 1) {
-            if(ptype=='cdf') {
-                n <- seq(1, getqfun(x)(0.001), by = 1)
-                plot(n, getpfun(x)(n), type = 'l', col = thr.col, 
-                     xlab = 'Abundance', ylab = 'Cumulative probability', ...)
-            } else {
-                plot(sad2Rank(x), type = 'l', col = thr.col, 
-                     xlab = 'Rank', ylab = 'Abundance', ...)
-            }
-        } else {
-            if(ptype == 'cdf') {
-                n <- seq(min(x$data), max(x$data), by = 1)
-                points(n, getpfun(x)(n), type = 'l', col = thr.col)
-            } else {
-                points(sad2Rank(x), type = 'l', col = thr.col)
-            }
+        if(ptype == 'cdf') {
+            points(n, getpfun(x)(n), type = 'l', col = thr.col)
+    } else {
+            points(sad2Rank(x), type = 'l', col = thr.col)
         }
     }
 }
