@@ -24,7 +24,8 @@ print.sad <- function(x) {
     if(is.null(x$model)) {
         cat('emperical species abundance distribution \n')
     } else {
-        cat(sprintf('species abundance distribution modeled by "%s" with parameter%s \n', x$model, ifelse(length(x$MLE > 1), '', 's')))
+        cat(sprintf('species abundance distribution modeled by "%s" with parameter%s \n', x$model, 
+                    ifelse(length(x$MLE > 1), '', 's')))
         print(x$MLE)
     }
     cat(sprintf('%s data', ifelse(is.null(x$data), 'does not include', 'includes')))
@@ -61,23 +62,29 @@ plot.sad <- function(x, ptype=c('cdf', 'rad'), thr.col='red', ...) {
     if(!is.null(x$data)) {
         if(ptype=='cdf') {
             thisCDF <- .ecdf(x$data)
-            plot(thisCDF[, 1], thisCDF[, 2], ...)
+            plot(thisCDF[, 1], thisCDF[, 2], xlab = 'Abundance', ylab = 'Cumulative probability', ...)
         } else {
-            plot(sort(x$data, decreasing=TRUE))
+            plot(sort(x$data, decreasing=TRUE), xlab = 'Rank', ylab = 'Abundance', ...)
         }
     }
     
-#     if(!is.null(x$model)) {
-#         if(ptype == 'cdf') {
-#             'stub'
-#         } else {
-#             'stub'
-#         }
-#         
-#         if(dev.cur() == 1) {
-#             plot() # set-up plotting window
-#         } else {
-#             lines()
-#         }
-#     }
+    if(!is.null(x$model)) {
+        if(dev.cur() == 1) {
+            if(ptype=='cdf') {
+                n <- seq(1, getqfun(x)(0.001), by = 1)
+                plot(n, getpfun(x)(n), type = 'l', col = thr.col, 
+                     xlab = 'Abundance', ylab = 'Cumulative probability', ...)
+            } else {
+                plot(sad2Rank(x), type = 'l', col = thr.col, 
+                     xlab = 'Rank', ylab = 'Abundance', ...)
+            }
+        } else {
+            if(ptype == 'cdf') {
+                n <- seq(min(x$data), max(x$data), by = 1)
+                points(n, getpfun(x)(n), type = 'l', col = thr.col)
+            } else {
+                points(sad2Rank(x), type = 'l', col = thr.col)
+            }
+        }
+    }
 }
