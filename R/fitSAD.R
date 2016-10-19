@@ -101,7 +101,7 @@ fitSAD <- function(x, models=c('fish', 'plnorm', 'stick', 'tnegb', 'tpois'), kee
     init.sig <- sd(log(x))
     
     fit <- optim(c(init.mu, init.sig), fun, method='L-BFGS-B', 
-                 lower=c(0, .Machine$double.eps), upper=2*c(init.mu, init.sig))
+                 lower=c(-10*init.mu, .Machine$double.eps), upper=2*c(init.mu, init.sig))
     
     return(list(MLE=fit$par, ll=-fit$value, df=2, nobs=length(x)))
 }

@@ -5,16 +5,18 @@ Version: 1.0
 Date: 2016-03-20
 Author: Andy Rominger
 Maintainer: Andy Rominger <ajrominger@gmail.com>
-Description: Methods for data management, fitting theoretical predictions to macroecologial patterns and visualization.
+Description: Methods for data management, fitting theoretical predictions to
+    macroecologial patterns and visualization.
 License: GPL-2
 URL: https://github.com/ajrominger/pika
 BugReports: https://github.com/ajrominger/pika/issues
 LazyLoad: yes
 LazyData: true
-Depends: 
+Depends:
     R (>= 2.10)
-Imports: 
+Imports:
     poilog,
     gsl
 Suggests:
     testthat
+RoxygenNote: 5.0.1
