@@ -10,16 +10,12 @@
 
 logLikZ(x, ...)
 
-\method{logLikZ}{sad}(x, nrep = 1000, return.sim = FALSE, ...)
+\method{logLikZ}{sad}(x, ...)
 }
 \arguments{
 \item{x}{an object of class \code{sad}}
 
 \item{...}{arguments to be passed to methods}
-
-\item{nrep}{number of simulations from the fitted METE distribution}
-
-\item{return.sim}{logical; return the simulated liklihood values}
 }
 \value{
 \code{logLik} returns an object of class \code{logLik} with attributes "\code{df}" and "\code{nobs}". 
@@ -27,7 +23,6 @@ logLikZ(x, ...)
 \describe{
    \item{z}{The z-score}
    \item{obs}{The observed log-likelihood of the actual data set}
-   \item{sim}{\code{nrep} simulated values if \code{return.sim=TRUE}, \code{NULL} otherwise.}
 }
 }
 \description{

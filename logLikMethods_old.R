@@ -8,6 +8,8 @@
 #' a z-score.
 #' 
 #' @param x an object of class \code{sad}
+#' @param nrep number of simulations from the fitted METE distribution 
+#' @param return.sim logical; return the simulated liklihood values
 #' @param ... arguments to be passed to methods
 #' 
 #' @keywords species abundance, SAD, log likelihood
@@ -24,6 +26,7 @@
 #' \describe{
 #'    \item{z}{The z-score}
 #'    \item{obs}{The observed log-likelihood of the actual data set}
+#'    \item{sim}{\code{nrep} simulated values if \code{return.sim=TRUE}, \code{NULL} otherwise.}
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
@@ -52,41 +55,24 @@ logLikZ <- function(x, ...) {
 #' @export 
 #' @importFrom stats logLik sd
 
-logLikZ.sad <- function(x, ...) {
+logLikZ.sad <- function(x, nrep=1000, return.sim=FALSE, ...) {
     lik.obs <- logLik(x)
     n <- x$nobs
-    
-    ## hypothetical distribution of probabilities
-    p0 <- .p0(x)
-    
-    ## hypothetical mean and var
-    m <- sum(p0 * exp(p0)) * n
-    v <- sum((m/n - p0)^2 * exp(p0)) * n
-    
-    ## z^2-value
-    z <- ((lik.obs - m) / sqrt(v))^2
-    
-    return(list(z=as.numeric(z), obs=lik.obs))
-}
-
-
-## helper function to compute distribution of potential probabilities under the 
-## hypothesis that the SAD of interest is true
-
-.p0 <- function(x) {
-    n0 <- 1:10^5
+    rfun <- getrfun(x)
     dfun <- getdfun(x)
     
-    p0 <- dfun(n0, log = TRUE)
-    p0 <- p0[is.finite(p0)]
+    lik.sim <- replicate(nrep, {
+        newx <- rfun(n)
+        sum(dfun(newx, log=TRUE))
+    })
     
-    if(exp(p0[length(p0)]) > .Machine$double.eps^0.75) {
-        n0add <- (n0[length(p0)] + 1):10^6
-        p0add <- dfun(n0add, log = TRUE)
-        p0add <- p0add[is.finite(p0add)]
-        
-        p0 <- c(p0, p0add)
+    z <- ((lik.obs - mean(lik.sim)) / sd(lik.sim))^2
+    
+    if(return.sim) {
+        lik.sim <- ((lik.sim - mean(lik.sim)) / sd(lik.sim))^2
+    } else {
+        lik.sim <- NULL
     }
     
-    return(p0)
+    return(list(z=as.numeric(z), obs=lik.obs, sim=lik.sim))
 }
