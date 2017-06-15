@@ -46,14 +46,14 @@ These functions assume infinite support of the Poisson log-normal from [1, Inf).
 dplnorm(1:10, 0.5, 0.1)
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \references{
 Engen, S., R. Lande, T. Walla & P. J. DeVries. 2002. Analyzing spatial structure of communities using the two-dimensional Poisson lognormal species abundance model. American Naturalist 160: 60-73.
 }
 \seealso{
 dpois, dlnorm, dtpois
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{Poisson}
 \keyword{SAD}
@@ -61,4 +61,3 @@ dpois, dlnorm, dtpois
 \keyword{log}
 \keyword{normal,}
 \keyword{species}
-

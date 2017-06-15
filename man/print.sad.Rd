@@ -24,13 +24,12 @@ sad1 <- fitSAD(x, models='tpois')
 print(sad1[[1]])
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 fitSAD
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{SAD}
 \keyword{abundance,}
 \keyword{species}
-

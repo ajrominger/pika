@@ -34,14 +34,13 @@ sad1 <- fitSAD(x, models='tpois')
 sample(sad1[[1]], 10)
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 sample
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{SAD}
 \keyword{abundance,}
 \keyword{species}
 \keyword{subsampling,}
-

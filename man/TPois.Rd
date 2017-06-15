@@ -45,15 +45,14 @@ These functions assume infinite support of the truncated Poisson from [1, Inf).
 dtpois(1:10, 2)
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 dpois
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{Poisson,}
 \keyword{SAD}
 \keyword{Truncated}
 \keyword{abundance,}
 \keyword{species}
-

@@ -23,10 +23,9 @@ This is effectively the quantile function of the distribution.
 'stub'
                
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 fitSAD, qqplot
 }
-
+\author{
+Andy Rominger <ajrominger@gmail.com>
+}

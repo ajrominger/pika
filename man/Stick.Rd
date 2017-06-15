@@ -45,11 +45,11 @@ These functions assume infinite support of the Broken stick model from [1, Inf).
 dstick(1:10, 0.5)
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 fitSAD, dgeom
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{Broken}
 \keyword{SAD}
@@ -58,4 +58,3 @@ fitSAD, dgeom
 \keyword{geometric}
 \keyword{species}
 \keyword{stick,}
-

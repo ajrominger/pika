@@ -47,11 +47,11 @@ These functions assume infinite support of the truncated negative binomial from 
 dtnegb(1:10, 0.5, 2)
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 dnbinom
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{SAD}
 \keyword{Truncated}
@@ -59,4 +59,3 @@ dnbinom
 \keyword{binomial,}
 \keyword{negative}
 \keyword{species}
-

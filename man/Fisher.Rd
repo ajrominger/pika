@@ -53,4 +53,3 @@ Andy Rominger <ajrominger@gmail.com>
 \keyword{abundance,}
 \keyword{logseries,}
 \keyword{species}
-

@@ -40,15 +40,14 @@ sad1 <- fitSAD(x, models='tpois')
 logLik(sad1[[1]])
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 fitSAD, logLik
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{SAD,}
 \keyword{abundance,}
 \keyword{likelihood}
 \keyword{log}
 \keyword{species}
-

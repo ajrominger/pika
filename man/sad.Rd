@@ -44,15 +44,14 @@ x <- rtpois(1000, 2)
 sad(x, model='tpois')
 
 }
-\author{
-Andy Rominger <ajrominger@gmail.com>
-}
 \seealso{
 logLik.sad, dfish, dplnorm, dstick, dtnegb, dtpois
+}
+\author{
+Andy Rominger <ajrominger@gmail.com>
 }
 \keyword{Maximum}
 \keyword{SAD}
 \keyword{abundance,}
 \keyword{likelihood,}
 \keyword{species}
-
