@@ -66,7 +66,7 @@ logLikZ.sad <- function(x, ...) {
     ## z^2-value
     z <- ((lik.obs - m) / sqrt(v))^2
     
-    return(list(z=as.numeric(z), obs=lik.obs))
+    return(as.numeric(z))
 }
 
 
