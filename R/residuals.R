@@ -116,11 +116,5 @@ mseZ.sad <- function(x, nrep, ...) {
     
     z <- ((mse.obs - mean(mse.sim)) / sd(mse.sim))^2
     
-    if(return.sim) {
-        mse.sim <- ((mse.sim - mean(mse.sim)) / sd(mse.sim))^2
-    } else {
-        mse.sim <- NULL
-    }
-    
     return(as.numeric(z))
 }
