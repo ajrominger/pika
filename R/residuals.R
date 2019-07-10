@@ -101,7 +101,7 @@ mseZ <- function(x, ...) {
 #' @rdname residuals
 #' @export 
 #' @importFrom stats sd
-mseZ.sad <- function(x, nrep, return.sim=FALSE, ...) {
+mseZ.sad <- function(x, nrep, ...) {
     this.mseFun <- function(x) mse(x, ...)
     mse.obs <- this.mseFun(x)
     
@@ -122,5 +122,5 @@ mseZ.sad <- function(x, nrep, return.sim=FALSE, ...) {
         mse.sim <- NULL
     }
     
-    return(list(z=z, obs=mse.obs, sim=mse.sim))
+    return(as.numeric(z))
 }
