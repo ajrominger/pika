@@ -113,6 +113,7 @@ rfish <- function(n, beta) {
     ## b = 1
     ## c = data value + 2
     ## z = exp(-beta)
+    
     1/a * x^a * (1-x)^b * gsl::hyperg_2F1(a+b, 1, a+1, x)
 }
 
