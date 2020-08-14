@@ -32,9 +32,9 @@ Function to create an object of class \code{sad} from data or theoretical predic
 \details{
 An object of class \code{sad} can be created one three ways:
 \describe{
- \item{Raw data} specifying only \code{x} will produce an \code{sad} object without any parametric model fit to it
- \item{Fit model} specifying both \code{x} and \code{model} will fit the model to the data and return an \code{sad} object with both empirical and theoretical predictions
- \item{Theoretical model} specifying both \code{model} and \code{par} will produce an \code{sad} object with only the theoretical prediction but no data
+ \item{Raw data}{specifying only \code{x} will produce an \code{sad} object without any parametric model fit to it}
+ \item{Fit model}{specifying both \code{x} and \code{model} will fit the model to the data and return an \code{sad} object with both empirical and theoretical predictions}
+ \item{Theoretical model}{specifying both \code{model} and \code{par} will produce an \code{sad} object with only the theoretical prediction but no data}
 }
 
 Note that this function behaves almost identically to \code{fitSAD} for the case when both \code{x} and \code{model} are spcified, but \code{sad} is more flexible allowing for unfit \code{sad} objects and specification of theoretical SADs without fitting of data by maximum likelihood.
