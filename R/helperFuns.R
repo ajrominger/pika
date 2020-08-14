@@ -19,11 +19,11 @@
 .simSAD <- function(x) {
     n <- length(x$data)
     r <- switch(x$model, 
-                'fish' = rfish(n, x$MLE, log=log),
-                'plnorm' = rplnorm(n, x$MLE[1], x$MLE[2], log=log),
-                'stick' = rstick(n, x$MLE, log=log),
-                'tnegb' = rtnegb(n, x$MLE[1], x$MLE[2], log=log),
-                'tpois' = rtpois(n, x$MLE, log=log))
+                'fish' = rfish(n, x$MLE),
+                'plnorm' = rplnorm(n, x$MLE[1], x$MLE[2]),
+                'stick' = rstick(n, x$MLE),
+                'tnegb' = rtnegb(n, x$MLE[1], x$MLE[2]),
+                'tpois' = rtpois(n, x$MLE))
     
     return(r)
 }
