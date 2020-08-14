@@ -4,8 +4,11 @@
 \alias{fitSAD}
 \title{Fit a model for a species abundance distribution}
 \usage{
-fitSAD(x, models = c("fish", "plnorm", "stick", "tnegb", "tpois"),
-  keepData = FALSE)
+fitSAD(
+  x,
+  models = c("fish", "plnorm", "stick", "tnegb", "tpois"),
+  keepData = FALSE
+)
 }
 \arguments{
 \item{x}{vector of integers representing a sample of species abundances}

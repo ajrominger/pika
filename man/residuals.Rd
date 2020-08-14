@@ -8,8 +8,7 @@
 \alias{mseZ.sad}
 \title{Compute residuals and mean squared error between observed and predicted SADs.}
 \usage{
-\method{residuals}{sad}(x, type = c("rank", "cumulative"), relative = TRUE,
-  log = FALSE, ...)
+\method{residuals}{sad}(x, type = c("rank", "cumulative"), relative = TRUE, log = FALSE, ...)
 
 mse(x, ...)
 
@@ -17,7 +16,7 @@ mse(x, ...)
 
 mseZ(x, ...)
 
-\method{mseZ}{sad}(x, nrep, return.sim = FALSE, ...)
+\method{mseZ}{sad}(x, nrep, ...)
 }
 \arguments{
 \item{x}{an \code{sad} object}
