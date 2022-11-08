@@ -37,7 +37,7 @@
 #' @seealso logLik.sad, dlseries, dplnorm, dstick, dtnegb, dtpois
 # @references 
 
-sad <- function(x, model, par, keepData=FALSE) {
+sad <- function(x, model, par, keepData = TRUE) {
     if(missing(x)) {
         out <- list(MLE=par, model=model)
     } else if(missing(model)) {
