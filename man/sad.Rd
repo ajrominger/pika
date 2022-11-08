@@ -4,7 +4,7 @@
 \alias{sad}
 \title{Create a species abundance distribution}
 \usage{
-sad(x, model, par, keepData = FALSE)
+sad(x, model, par, keepData = TRUE)
 }
 \arguments{
 \item{x}{vector of integers representing a sample of species abundances}

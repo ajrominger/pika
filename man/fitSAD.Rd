@@ -6,8 +6,8 @@
 \usage{
 fitSAD(
   x,
-  models = c("lseries", "plnorm", "stick", "tnegb", "tpois"),
-  keepData = FALSE
+  models = c("lseries", "plnorm", "stick", "tnegb", "tpois", "untb"),
+  keepData = TRUE
 )
 }
 \arguments{
@@ -31,13 +31,14 @@ A list containing named objects of class \code{sad} with elements
 \code{fitSAD} uses maximum likelihood to fit one or several SAD models to data
 }
 \details{
-The default behavior fits all models availible in \code{pika}:
+The default behavior fits all models available in \code{pika}:
 \describe{
  \item{\code{lseries}}{Log series}
  \item{\code{plnorm}}{Poisson log normal}
  \item{\code{stick}}{Broken stick}
  \item{\code{tnegb}}{Truncated negative binomial}
  \item{\code{tpois}}{Truncated Poisson}
+ \item{\code{untb}}{Unified Neutral Theory of Biodiversity}
 }
 Exact solutions are availible for \code{tpois} and \code{stick}. In the case of \code{lseries}, 
 optimization is used to solve \eqn{\bar{x} = \frac{-1}{log(1-e^{-\beta})}\frac{e^{-\beta}}{1-e^{-\beta}}}. 

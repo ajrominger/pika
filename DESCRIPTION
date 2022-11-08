@@ -17,7 +17,8 @@ Depends:
 Imports:
     poilog,
     gsl, 
-    extraDistr
+    extraDistr, 
+    untb
 Suggests:
     testthat
 RoxygenNote: 7.2.1

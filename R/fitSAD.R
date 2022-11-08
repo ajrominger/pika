@@ -2,13 +2,14 @@
 #'  
 #' @description \code{fitSAD} uses maximum likelihood to fit one or several SAD models to data
 #' 
-#' @details The default behavior fits all models availible in \code{pika}:
+#' @details The default behavior fits all models available in \code{pika}:
 #' \describe{
 #'  \item{\code{lseries}}{Log series}
 #'  \item{\code{plnorm}}{Poisson log normal}
 #'  \item{\code{stick}}{Broken stick}
 #'  \item{\code{tnegb}}{Truncated negative binomial}
 #'  \item{\code{tpois}}{Truncated Poisson}
+#'  \item{\code{untb}}{Unified Neutral Theory of Biodiversity}
 #' }
 #' Exact solutions are availible for \code{tpois} and \code{stick}. In the case of \code{lseries}, 
 #' optimization is used to solve \eqn{\bar{x} = \frac{-1}{log(1-e^{-\beta})}\frac{e^{-\beta}}{1-e^{-\beta}}}. 
@@ -39,7 +40,9 @@
 #' @seealso logLik.sad, dlseries, dplnorm, dstick, dtnegb, dtpois
 # @references 
 
-fitSAD <- function(x, models=c('lseries', 'plnorm', 'stick', 'tnegb', 'tpois'), keepData=FALSE) {
+fitSAD <- function(x, models = c('lseries', 'plnorm', 'stick', 'tnegb', 
+                                 'tpois', 'untb'), 
+                   keepData = TRUE) {
     if(length(models) > 1) {
         out <- lapply(models, function(m) fitSAD(x, m, keepData)[[1]])
         # return(out)
@@ -49,7 +52,8 @@ fitSAD <- function(x, models=c('lseries', 'plnorm', 'stick', 'tnegb', 'tpois'), 
                       'plnorm' = .fitPlnorm(x),
                       'stick' = .fitStick(x),
                       'tnegb' = .fitTnegb(x),
-                      'tpois' = .fitTpois(x))
+                      'tpois' = .fitTpois(x), 
+                      'untb' = .fitUNTB(x))
         
         out$model <- models
         if(keepData) out$data <- x
@@ -150,3 +154,13 @@ fitSAD <- function(x, models=c('lseries', 'plnorm', 'stick', 'tnegb', 'tpois'), 
     return(list(MLE=mle, ll=sum(dtpois(x, mle, log=TRUE)), df=1, nobs=length(x)))
 }
 
+## MLE for UNTB
+.fitUNTB <- function(x) {
+    n <- untb::count(x)
+    l <- untb::logkda.R(n, use.brob = TRUE)
+    mle <- untb::optimal.params(n, log.kda = l)
+    
+    ll <- untb::etienne(mle[1], mle[2], log.kda = l, n, give.like = TRUE)
+    
+    return(list(MLE = mle, ll = ll, df = 2, nobs = length(x)))
+}
