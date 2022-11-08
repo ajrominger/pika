@@ -60,32 +60,32 @@ test_that('truncated Negative Binomial rfun works', {
 })
 
 ## =================================
-## Fisher log series
+## log series
 ## =================================
 
-test_that('Fisher log series dfun works', {
-    expect_true(all(abs(VGAM::dlog(1:10, exp(-0.1)) - dfish(1:10, 0.1)) <= .Machine$double.eps))
-    expect_warning(dfish(0.5, 0.1))
-    expect_equal(dfish(0, 0.1), 0)
+test_that('log series dfun works', {
+    expect_true(all(abs(VGAM::dlog(1:10, exp(-0.1)) - dlseries(1:10, 0.1)) <= .Machine$double.eps))
+    expect_warning(dlseries(0.5, 0.1))
+    expect_equal(dlseries(0, 0.1), 0)
 })
 
-test_that('Fisher log series pfun works', {
-    expect_true(all(abs(pfish(1:10, 0.1) - cumsum(dfish(1:10, 0.1))) <= .Machine$double.eps*6))
-    expect_true(all(abs(pfish(1:10, 0.1, log=TRUE) - log(cumsum(dfish(1:10, 0.1)))) <= .Machine$double.eps*12))
-    expect_true(all(abs(pfish(1:10, 0.1, lower.tail=FALSE) - (1 - cumsum(dfish(1:10, 0.1)))) <= .Machine$double.eps*6))
-    expect_equal(pfish(0, 0.1), 0)
+test_that('log series pfun works', {
+    expect_true(all(abs(plseries(1:10, 0.1) - cumsum(dlseries(1:10, 0.1))) <= .Machine$double.eps*6))
+    expect_true(all(abs(plseries(1:10, 0.1, log=TRUE) - log(cumsum(dlseries(1:10, 0.1)))) <= .Machine$double.eps*12))
+    expect_true(all(abs(plseries(1:10, 0.1, lower.tail=FALSE) - (1 - cumsum(dlseries(1:10, 0.1)))) <= .Machine$double.eps*6))
+    expect_equal(plseries(0, 0.1), 0)
 })
 
-test_that('Fisher log series qfun works', {
-    expect_equal(qfish(pfish(1:10, 0.1), 0.1), 1:10)
-    expect_equal(qfish(pfish(1:10, 0.1, lower.tail=FALSE), 0.1, lower.tail=FALSE), 1:10)
-    expect_equal(qfish(pfish(1:10, 0.1, log=TRUE), 0.1, log=TRUE), 1:10)
+test_that('log series qfun works', {
+    expect_equal(qlseries(plseries(1:10, 0.1), 0.1), 1:10)
+    expect_equal(qlseries(plseries(1:10, 0.1, lower.tail=FALSE), 0.1, lower.tail=FALSE), 1:10)
+    expect_equal(qlseries(plseries(1:10, 0.1, log=TRUE), 0.1, log=TRUE), 1:10)
 })
 
-test_that('Fisher log series rfun works', {
+test_that('log series rfun works', {
     b <- 0.1
     tru.mean <- -1/log(1-exp(-b)) * exp(-b)/(1 - exp(-b))
-    r1 <- rfish(10000, b)
+    r1 <- rlseries(10000, b)
     tru.mean - mean(r1)
     expect_true(abs(mean(r1) - tru.mean) < 0.5)
 })

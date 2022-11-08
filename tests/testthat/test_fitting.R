@@ -6,22 +6,22 @@ context('fitting functions work')
 
 test_that('fitting function returns expected results', {
     fitAll <- fitSAD(1:10)
-    fitOne <- fitSAD(1:10, models='fish')
+    fitOne <- fitSAD(1:10, models='lseries')
     expect_equal(length(fitAll), 5)
     expect_is(fitOne[[1]], 'sad')
     expect_is(fitOne, 'list')
-    expect_equal(names(fitOne), 'fish')
+    expect_equal(names(fitOne), 'lseries')
 })
 
 
 ## =================================
-## Fisher
+## logseries
 ## =================================
 
-test_that('Fisher log series fitting works', {
+test_that('log series fitting works', {
     b <- 0.01
-    x <- rfish(10000, b)
-    fit <- fitSAD(x, 'fish')
+    x <- rlseries(10000, b)
+    fit <- fitSAD(x, 'lseries')
     expect_true(abs(fit[[1]]$MLE - b) < 0.05*b)
 })
 

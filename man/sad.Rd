@@ -45,7 +45,7 @@ sad(x, model='tpois')
 
 }
 \seealso{
-logLik.sad, dfish, dplnorm, dstick, dtnegb, dtpois
+logLik.sad, dlseries, dplnorm, dstick, dtnegb, dtpois
 }
 \author{
 Andy Rominger <ajrominger@gmail.com>

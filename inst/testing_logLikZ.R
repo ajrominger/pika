@@ -6,11 +6,11 @@ library(pika)
 ## distribution and if CLT holds up for small sample size
 ## ===================================================================
 
-dfun <- function(x, ...) dfish(x, 0.1, ...)
+dfun <- function(x, ...) dlseries(x, 0.1, ...)
 S <- 100
 
 foo <- replicate(1000, {
-    x <- rfish(S, 0.1)
+    x <- rlseries(S, 0.1)
     sum(dfun(x, log = TRUE))
 })
 
@@ -93,7 +93,7 @@ logLikZ_new <- function(x) {
     return(p0)
 }
 
-x <- sad(rfish(100, 0.01), 'fish', keepData = TRUE)
+x <- sad(rlseries(100, 0.01), 'lseries', keepData = TRUE)
 plot(x, ptype = 'rad')
 foo1 <- logLikZ_old(x)
 foo2 <- logLikZ_new(x)

@@ -27,7 +27,7 @@ sad2Rank <- function(x, S=NULL) {
     }
     
     qfun <- switch(x$model,
-                   'fish' = function(p) qfish(p, x$MLE),
+                   'lseries' = function(p) qlseries(p, x$MLE),
                    'plnorm' = function(p) qplnorm(p, x$MLE[1], x$MLE[2]),
                    'stick' = function(p) qstick(p, x$MLE),
                    'tnegb' = function(p) qtnegb(p, x$MLE[1], x$MLE[2]),

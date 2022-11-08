@@ -34,7 +34,7 @@
 #' }
 #'
 #' @author Andy Rominger <ajrominger@@gmail.com>
-#' @seealso logLik.sad, dfish, dplnorm, dstick, dtnegb, dtpois
+#' @seealso logLik.sad, dlseries, dplnorm, dstick, dtnegb, dtpois
 # @references 
 
 sad <- function(x, model, par, keepData=FALSE) {
