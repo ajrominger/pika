@@ -16,7 +16,8 @@ Depends:
     R (>= 2.10)
 Imports:
     poilog,
-    gsl
+    gsl, 
+    extraDistr
 Suggests:
     testthat
 RoxygenNote: 7.1.1
